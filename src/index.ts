@@ -9,7 +9,9 @@ import {
   BoltVehicleTypeCollector,
   BoltVehiclePositionCollector,
   TECGTFSRealtimeCollector,
-  TECGTFSStaticCollector
+  TECGTFSStaticCollector,
+  SNCBGTFSRealtimeCollector,
+  SNCBGTFSStaticCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -61,6 +63,8 @@ async function main(): Promise<void> {
       new BoltVehiclePositionCollector(),
       new TECGTFSRealtimeCollector(),
       new TECGTFSStaticCollector(),
+      new SNCBGTFSRealtimeCollector(),
+      new SNCBGTFSStaticCollector(),
     ],
   })
   
