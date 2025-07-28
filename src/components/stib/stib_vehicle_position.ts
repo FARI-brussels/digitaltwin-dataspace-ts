@@ -33,7 +33,7 @@ interface VehiclePosition {
     [key: string]: any // Pour les autres propriétés dynamiques
 }
 
-export class VehiclePositionCollector extends Collector {
+export class STIBVehiclePositionCollector extends Collector {
     private readonly baseUrl =
         'https://data.stib-mivb.brussels/api/explore/v2.1/catalog/datasets/vehicle-position-rt-production'
 

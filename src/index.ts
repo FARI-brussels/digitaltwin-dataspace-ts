@@ -1,7 +1,14 @@
 import 'dotenv/config'
 import { DigitalTwinEngine, KnexDatabaseAdapter, Env } from 'digitaltwin-core'
 import { LocalStorageService } from 'digitaltwin-core'
-import { JSONPlaceholderCollector, IrcelineSosCollector } from './components/index.js'
+import { 
+  JSONPlaceholderCollector,
+  IrcelineSosCollector,
+  STIBVehiclePositionCollector,
+  BoltGeofenceCollector,
+  BoltVehicleTypeCollector,
+  BoltVehiclePositionCollector
+} from './components/index.js'
 
 async function main(): Promise<void> {
   console.log('🔷 Starting fari-v2 Digital Twin...')
@@ -45,7 +52,11 @@ async function main(): Promise<void> {
     },
     collectors: [
       new JSONPlaceholderCollector(),
-      new IrcelineSosCollector()
+      new IrcelineSosCollector(),
+      new STIBVehiclePositionCollector(),
+      new BoltGeofenceCollector(),
+      new BoltVehicleTypeCollector(),
+      new BoltVehiclePositionCollector()
     ],
   })
   
