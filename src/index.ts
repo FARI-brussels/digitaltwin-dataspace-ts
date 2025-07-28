@@ -11,7 +11,10 @@ import {
   TECGTFSRealtimeCollector,
   TECGTFSStaticCollector,
   SNCBGTFSRealtimeCollector,
-  SNCBGTFSStaticCollector
+  SNCBGTFSStaticCollector,
+  PonyGeofenceCollector,
+  PonyVehiclePositionCollector,
+  PonyVehicleTypeCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -65,6 +68,9 @@ async function main(): Promise<void> {
       new TECGTFSStaticCollector(),
       new SNCBGTFSRealtimeCollector(),
       new SNCBGTFSStaticCollector(),
+      new PonyGeofenceCollector(),
+      new PonyVehiclePositionCollector(),
+      new PonyVehicleTypeCollector(),
     ],
   })
   
