@@ -14,7 +14,11 @@ import {
   SNCBGTFSStaticCollector,
   PonyGeofenceCollector,
   PonyVehiclePositionCollector,
-  PonyVehicleTypeCollector
+  PonyVehicleTypeCollector,
+  InfrabelLineSectionCollector,
+  InfrabelOperationalPointsCollector,
+  InfrabelPunctualityCollector,
+  InfrabelSegmentsCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -71,6 +75,10 @@ async function main(): Promise<void> {
       new PonyGeofenceCollector(),
       new PonyVehiclePositionCollector(),
       new PonyVehicleTypeCollector(),
+      new InfrabelLineSectionCollector(),
+      new InfrabelOperationalPointsCollector(),
+      new InfrabelPunctualityCollector(),
+      new InfrabelSegmentsCollector(),
     ],
   })
   

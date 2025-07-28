@@ -17,3 +17,8 @@ export { SNCBGTFSStaticCollector } from './sncb/sncb_gtfs_static_collector.js'
 export { PonyGeofenceCollector } from './pony/pony_geofence_collector.js'
 export { PonyVehiclePositionCollector } from './pony/pony_vehicle_position_collector.js'
 export { PonyVehicleTypeCollector } from './pony/pony_vehicle_type_collector.js'
+
+export { InfrabelLineSectionCollector } from './infrabel/infrabel_line_section_collector.js'
+export { InfrabelOperationalPointsCollector } from './infrabel/infrabel_operational_points_collector.js'
+export { InfrabelPunctualityCollector } from './infrabel/infrabel_punctuality_collector.js'
+export { InfrabelSegmentsCollector } from './infrabel/infrabel_segments_collector.js'
