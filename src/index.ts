@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { DigitalTwinEngine, KnexDatabaseAdapter, Env } from 'digitaltwin-core'
 import { LocalStorageService } from 'digitaltwin-core'
-import { 
+import {
   JSONPlaceholderCollector,
   IrcelineSosCollector,
   STIBVehiclePositionCollector,
@@ -10,6 +10,7 @@ import {
   BoltVehiclePositionCollector,
   TECGTFSRealtimeCollector,
   TECGTFSStaticCollector,
+  LimeVehiclePositionCollector,
   SNCBGTFSRealtimeCollector,
   SNCBGTFSStaticCollector,
   PonyGeofenceCollector,
@@ -23,7 +24,7 @@ import {
 
 async function main(): Promise<void> {
   console.log('🔷 Starting fari-v2 Digital Twin...')
-  
+
   // Validate environment variables
   const env = Env.validate({
     PORT: Env.schema.number({ optional: true }),
@@ -35,12 +36,12 @@ async function main(): Promise<void> {
     REDIS_HOST: Env.schema.string({ optional: true }),
     REDIS_PORT: Env.schema.number({ optional: true }),
   })
-  
+
   console.log('✅ Environment variables validated')
-  
+
   // Initialize storage service first
   const storage = new LocalStorageService(env.STORAGE_PATH || './uploads')
-  
+
   // Database configuration
   const dbConfig = {
     client: 'better-sqlite3',
@@ -49,10 +50,10 @@ async function main(): Promise<void> {
     },
     useNullAsDefault: true
   }
-  
+
   // Initialize database adapter
   const database = new KnexDatabaseAdapter(dbConfig, storage)
-  
+
   // Create Digital Twin Engine
   const engine = new DigitalTwinEngine({
     database,
@@ -79,11 +80,12 @@ async function main(): Promise<void> {
       new InfrabelOperationalPointsCollector(),
       new InfrabelPunctualityCollector(),
       new InfrabelSegmentsCollector(),
+      new LimeVehiclePositionCollector(),
     ],
   })
-  
+
   console.log('🔧 Digital Twin Engine configured')
-  
+
   // Start the engine
   await engine.start()
   const port = engine.getPort() || env.PORT || 3000
@@ -91,7 +93,7 @@ async function main(): Promise<void> {
   console.log(`📊 Database: SQLite`)
   console.log(`💾 Storage: Local filesystem (${env.STORAGE_PATH || './uploads'})`)
   console.log(`🔄 Queue: Redis enabled`)
-  
+
   // Graceful shutdown
   process.on('SIGINT', async () => {
     console.log('\n🛑 Shutting down gracefully...')
