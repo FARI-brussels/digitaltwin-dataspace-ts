@@ -4,6 +4,9 @@ export { IrcelineSosCollector } from './irceline_sos_collector.js'
 
 export { STIBVehiclePositionCollector } from './stib/stib_vehicle_position.js'
 
-export { BoltGeofenceCollector } from './bolt/bolt_geofence_collector'
-export { BoltVehiclePositionCollector } from './bolt/bolt_vehicle_position_collector'
-export { BoltVehicleTypeCollector } from './bolt/bolt_vehicle_type_collector'
+export { BoltGeofenceCollector } from './bolt/bolt_geofence_collector.js'
+export { BoltVehiclePositionCollector } from './bolt/bolt_vehicle_position_collector.js'
+export { BoltVehicleTypeCollector } from './bolt/bolt_vehicle_type_collector.js'
+
+export { TECGTFSRealtimeCollector } from './tec/tec_gtfs_realtime_collector.js'
+export { TECGTFSStaticCollector } from './tec/tec_gtfs_static_collector.js'
