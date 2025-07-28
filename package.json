@@ -7,25 +7,21 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js",
-    "dt:test": "tsx src/dt-cli.ts test",
-    "dt:dev": "tsx src/dt-cli.ts dev"
+    "start": "node dist/index.js"
   },
-  "bin": {
-    "dt": "./dist/dt-cli.js"
-  },
+  "bin": {},
   "dependencies": {
-    "@adonisjs/env": "^6.2.0",
-    "commander": "^12.0.0",
-    "digitaltwin-core": "^0.3.0",
-    "ioredis": "^5.6.1",
+    "digitaltwin-core": "^0.4.0",
     "knex": "^3.0.0",
-    "pg": "^8.11.0"
+    "commander": "^12.0.0",
+    "dotenv": "^17.2.1",
+    "better-sqlite3": "^12.2.0",
+    "ioredis": "^5.6.1"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
-    "@types/pg": "^8.10.0",
+    "typescript": "^5.0.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.0.0"
+    "digitaltwin-cli": "^0.1.1"
   }
 }

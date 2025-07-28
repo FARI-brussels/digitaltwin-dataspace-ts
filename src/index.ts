@@ -1,27 +1,21 @@
+import 'dotenv/config'
 import { DigitalTwinEngine, KnexDatabaseAdapter, Env } from 'digitaltwin-core'
 import { LocalStorageService } from 'digitaltwin-core'
-import {JSONPlaceholderCollector, VehiclePositionCollector} from './components/index.js'
-import dotenv from 'dotenv'
+import { JSONPlaceholderCollector, IrcelineSosCollector } from './components/index.js'
 
 async function main(): Promise<void> {
-  console.log('🔷 Starting digital_twin_ts Digital Twin...')
-  dotenv.config()
-
+  console.log('🔷 Starting fari-v2 Digital Twin...')
+  
   // Validate environment variables
   const env = Env.validate({
     PORT: Env.schema.number({ optional: true }),
-    // PostgreSQL configuration
-    DB_HOST: Env.schema.string(),
-    DB_PORT: Env.schema.number({ optional: true }),
-    DB_USER: Env.schema.string(),
-    DB_PASSWORD: Env.schema.string(),
-    DB_NAME: Env.schema.string(),
+    // SQLite configuration
+    DB_PATH: Env.schema.string({ optional: true }),
     // Local storage configuration
     STORAGE_PATH: Env.schema.string({ optional: true }),
-    // Redis configuration
+    // Redis configuration  
     REDIS_HOST: Env.schema.string({ optional: true }),
     REDIS_PORT: Env.schema.number({ optional: true }),
-    STIB_API_KEY: Env.schema.string(),
   })
   
   console.log('✅ Environment variables validated')
@@ -31,14 +25,11 @@ async function main(): Promise<void> {
   
   // Database configuration
   const dbConfig = {
-    client: 'pg',
+    client: 'better-sqlite3',
     connection: {
-      host: env.DB_HOST,
-      port: env.DB_PORT || 5432,
-      user: env.DB_USER,
-      password: env.DB_PASSWORD,
-      database: env.DB_NAME
-    }
+      filename: env.DB_PATH || './data/fari-v2.db'
+    },
+    useNullAsDefault: true
   }
   
   // Initialize database adapter
@@ -52,7 +43,10 @@ async function main(): Promise<void> {
       host: 'localhost',
       port: 6379
     },
-    collectors: [new JSONPlaceholderCollector(), new VehiclePositionCollector()],
+    collectors: [
+      new JSONPlaceholderCollector(),
+      new IrcelineSosCollector()
+    ],
   })
   
   console.log('🔧 Digital Twin Engine configured')
@@ -61,7 +55,7 @@ async function main(): Promise<void> {
   await engine.start()
   const port = engine.getPort() || env.PORT || 3000
   console.log(`🚀 Digital Twin Engine started on port ${port}`)
-  console.log(`📊 Database: PostgreSQL`)
+  console.log(`📊 Database: SQLite`)
   console.log(`💾 Storage: Local filesystem (${env.STORAGE_PATH || './uploads'})`)
   console.log(`🔄 Queue: Redis enabled`)
   

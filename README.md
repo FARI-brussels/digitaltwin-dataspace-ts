@@ -5,14 +5,14 @@ Digital Twin application built with [digitaltwin-core](https://github.com/CePseu
 ## Features
 
 ✅ **Environment Validation** - Automatic validation of required configuration  
-✅ **Database Support** - PostgreSQL with production-ready configuration  
+✅ **Database Support** - SQLite for easy development  
 ✅ **Storage** - Local file system storage (./uploads)  
 ✅ **Queue Management** - Redis-powered background jobs  
 ✅ **Example Components** - Random data collector and data processor included
 
 ## Configuration
 
-- **Database**: PostgreSQL
+- **Database**: SQLite
 - **Storage**: Local File System (./uploads)
 - **Queue**: Redis (BullMQ)
 - **Docker**: Not included
@@ -30,19 +30,14 @@ Digital Twin application built with [digitaltwin-core](https://github.com/CePseu
    # Edit .env.local with your actual configuration
    ```
 
-3. **Set up PostgreSQL:**
-   ```bash
-   # Make sure PostgreSQL is running and create database
-   createdb digital_twin_ts
-   ```
-4. **Set up Redis:**
+3. **Set up Redis:**
    ```bash
    # Make sure Redis is running
    redis-server
    ```
 
 
-5. **Start development server:**
+4. **Start development server:**
    ```bash
    npm run dev
    ```
