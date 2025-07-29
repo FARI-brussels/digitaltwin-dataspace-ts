@@ -24,3 +24,8 @@ export { InfrabelLineSectionCollector } from './infrabel/infrabel_line_section_c
 export { InfrabelOperationalPointsCollector } from './infrabel/infrabel_operational_points_collector.js'
 export { InfrabelPunctualityCollector } from './infrabel/infrabel_punctuality_collector.js'
 export { InfrabelSegmentsCollector } from './infrabel/infrabel_segments_collector.js'
+
+export { BrusselsMobilityBikeCountersCollector } from './brussels_mobility/brussels_mobility_bike_counters_collector.js'
+export { BrusselsMobilityBikeCountsCollector } from './brussels_mobility/brussels_mobility_bike_counts_collector.js'
+export { BrusselsMobilityTrafficDevicesCollector } from './brussels_mobility/brussels_mobility_traffic_devices_collector.js'
+export { BrusselsMobilityTrafficCountsCollector } from './brussels_mobility/brussels_mobility_traffic_counts_collector.js'

@@ -19,7 +19,11 @@ import {
   InfrabelLineSectionCollector,
   InfrabelOperationalPointsCollector,
   InfrabelPunctualityCollector,
-  InfrabelSegmentsCollector
+  InfrabelSegmentsCollector,
+  BrusselsMobilityBikeCountersCollector,
+  BrusselsMobilityBikeCountsCollector,
+  BrusselsMobilityTrafficDevicesCollector,
+  BrusselsMobilityTrafficCountsCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -80,6 +84,10 @@ async function main(): Promise<void> {
       new InfrabelOperationalPointsCollector(),
       new InfrabelPunctualityCollector(),
       new InfrabelSegmentsCollector(),
+      new BrusselsMobilityBikeCountersCollector(),
+      new BrusselsMobilityBikeCountsCollector(),
+      new BrusselsMobilityTrafficDevicesCollector(),
+      new BrusselsMobilityTrafficCountsCollector(),
       new LimeVehiclePositionCollector(),
     ],
   })
