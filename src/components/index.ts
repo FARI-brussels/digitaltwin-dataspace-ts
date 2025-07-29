@@ -31,3 +31,6 @@ export { BrusselsMobilityBikeCountersCollector } from './brussels_mobility/bruss
 export { BrusselsMobilityBikeCountsCollector } from './brussels_mobility/brussels_mobility_bike_counts_collector.js'
 export { BrusselsMobilityTrafficDevicesCollector } from './brussels_mobility/brussels_mobility_traffic_devices_collector.js'
 export { BrusselsMobilityTrafficCountsCollector } from './brussels_mobility/brussels_mobility_traffic_counts_collector.js'
+
+export { DeLijnGTFSRealtimeCollector } from './delijn/delijn_gtfs_realtime_collector.js'
+export { DeLijnGTFSStaticCollector } from './delijn/delijn_gtfs_static_collector.js'
