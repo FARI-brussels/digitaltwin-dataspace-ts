@@ -11,7 +11,6 @@ import {
   BoltVehiclePositionCollector,
   TECGTFSRealtimeCollector,
   TECGTFSStaticCollector,
-  LimeVehiclePositionCollector,
   SNCBGTFSRealtimeCollector,
   SNCBGTFSStaticCollector,
   PonyGeofenceCollector,
@@ -29,7 +28,9 @@ import {
   DeLijnGTFSStaticCollector,
   DottGeofenceCollector,
   DottVehiclePositionCollector,
-  DottVehicleTypeCollector
+  DottVehicleTypeCollector,
+  LimeVehiclePositionCollector,
+  LimeVehicleTypeCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -101,6 +102,7 @@ async function main(): Promise<void> {
       new DottVehiclePositionCollector(),
       new DottVehicleTypeCollector(),
       new LimeVehiclePositionCollector(),
+      new LimeVehicleTypeCollector(),
     ],
   })
 

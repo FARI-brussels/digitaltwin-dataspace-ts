@@ -13,8 +13,6 @@ export { BoltVehicleTypeCollector } from './bolt/bolt_vehicle_type_collector.js'
 export { TECGTFSRealtimeCollector } from './tec/tec_gtfs_realtime_collector.js'
 export { TECGTFSStaticCollector } from './tec/tec_gtfs_static_collector.js'
 
-export {LimeVehiclePositionCollector} from './lime_vehicle_position'
-
 export { SNCBGTFSRealtimeCollector } from './sncb/sncb_gtfs_realtime_collector.js'
 export { SNCBGTFSStaticCollector } from './sncb/sncb_gtfs_static_collector.js'
 
@@ -38,3 +36,6 @@ export { DeLijnGTFSStaticCollector } from './delijn/delijn_gtfs_static_collector
 export { DottGeofenceCollector } from './dott/dott_geofence_collector.js'
 export { DottVehiclePositionCollector } from './dott/dott_vehicle_position_collector.js'
 export { DottVehicleTypeCollector } from './dott/dott_vehicle_type_collector.js'
+
+export { LimeVehiclePositionCollector } from './lime/lime_vehicle_position_collector.js'
+export { LimeVehicleTypeCollector } from './lime/lime_vehicle_type_collector.js'
