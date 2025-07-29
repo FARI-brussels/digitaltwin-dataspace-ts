@@ -2,6 +2,8 @@ export { JSONPlaceholderCollector } from './jsonplaceholder_collector.js'
 
 export { IrcelineSosCollector } from './irceline_sos_collector.js'
 
+export { EnergyCollector } from './energy_collector.js'
+
 export { STIBVehiclePositionCollector } from './stib/stib_vehicle_position.js'
 
 export { BoltGeofenceCollector } from './bolt/bolt_geofence_collector.js'

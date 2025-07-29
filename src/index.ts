@@ -4,6 +4,7 @@ import { LocalStorageService } from 'digitaltwin-core'
 import {
   JSONPlaceholderCollector,
   IrcelineSosCollector,
+  EnergyCollector,
   STIBVehiclePositionCollector,
   BoltGeofenceCollector,
   BoltVehicleTypeCollector,
@@ -69,6 +70,7 @@ async function main(): Promise<void> {
     collectors: [
       new JSONPlaceholderCollector(),
       new IrcelineSosCollector(),
+      new EnergyCollector(),
       new STIBVehiclePositionCollector(),
       new BoltGeofenceCollector(),
       new BoltVehicleTypeCollector(),
