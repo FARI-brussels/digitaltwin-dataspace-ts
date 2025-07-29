@@ -64,7 +64,7 @@ export class JSONPlaceholderCollector extends Collector {
     const startTime = Date.now()
     
     try {
-      console.log('🌐 Fetching data from JSONPlaceholder API...')
+      // console.log('🌐 Fetching data from JSONPlaceholder API...')
       
       // Fetch posts and users concurrently
       const [postsResponse, usersResponse] = await Promise.all([
@@ -97,7 +97,7 @@ export class JSONPlaceholderCollector extends Collector {
         }
       }
       
-      console.log(`📊 Collected ${posts.length} posts and ${users.length} users from JSONPlaceholder (${collectionDuration}ms)`)
+      // console.log(`📊 Collected ${posts.length} posts and ${users.length} users from JSONPlaceholder (${collectionDuration}ms)`)
       return Buffer.from(JSON.stringify(data, null, 2))
       
     } catch (error) {

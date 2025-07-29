@@ -51,7 +51,7 @@ export class LimeVehiclePositionCollector extends Collector{
         const startTime = Date.now()
 
         try{
-            console.log('Collecting Lime Vehicle Position')
+            // console.log('Collecting Lime Vehicle Position')
 
             const [positionResponse] = await Promise.all([
                 fetch(`${this.baseUrl}/api/partners/v2/gbfs/brussels/free_bike_status`),
@@ -75,7 +75,7 @@ export class LimeVehiclePositionCollector extends Collector{
                 }
             }
 
-            console.log(`📊 Collected ${vehiclePositions.length} vehicles from Lime (${collectionDuration}ms)`)
+            // console.log(`📊 Collected ${vehiclePositions.length} vehicles from Lime (${collectionDuration}ms)`)
             return Buffer.from(JSON.stringify(data, null, 2))
         } catch (error) {
             console.error('❌ Error collecting data from Lime:', error)

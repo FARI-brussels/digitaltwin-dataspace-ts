@@ -87,7 +87,7 @@ export class STIBVehiclePositionCollector extends Collector {
         const startTime = Date.now()
 
         try {
-            console.log('🌐 Fetching data from STIB API...')
+            // console.log('🌐 Fetching data from STIB API...')
 
             const vehiclePositionResponse = await fetch(`${this.baseUrl}/records?limit=20`)
 
@@ -137,9 +137,9 @@ export class STIBVehiclePositionCollector extends Collector {
                 }
             }
 
-            console.log(
-                `📊 Collected ${parsedData.results.length} lines from STIB (${collectionDuration}ms) - ${successfulParses} with vehicles`
-            )
+            // console.log(
+            //     `📊 Collected ${parsedData.results.length} lines from STIB (${collectionDuration}ms) - ${successfulParses} with vehicles`
+            // )
 
             return Buffer.from(JSON.stringify(data, null, 2))
         } catch (error) {
