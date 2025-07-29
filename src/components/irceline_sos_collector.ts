@@ -6,7 +6,7 @@ import { Collector } from 'digitaltwin-core'
 export class IrcelineSosCollector extends Collector {
     getConfiguration() {
         return {
-            name: 'IRCELINE air quality',
+            name: 'irceline_sos',
             description: 'Data collector for IRCELINE air quality data',
             contentType: 'application/json',
             endpoint: 'api/irceline_sos',

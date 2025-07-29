@@ -42,7 +42,7 @@ export class LimeVehiclePositionCollector extends Collector{
             name:'lime-vehicle-position-collector',
             description: 'Collects Lime scooter position',
             contentType: 'application/json',
-            endpoint: '/api/lime/vehicle-position',
+            endpoint: 'api/lime/vehicle-position',
             tags: ['api', 'external', 'demo']
         }
     }
