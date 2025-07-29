@@ -26,7 +26,10 @@ import {
   BrusselsMobilityTrafficDevicesCollector,
   BrusselsMobilityTrafficCountsCollector,
   DeLijnGTFSRealtimeCollector,
-  DeLijnGTFSStaticCollector
+  DeLijnGTFSStaticCollector,
+  DottGeofenceCollector,
+  DottVehiclePositionCollector,
+  DottVehicleTypeCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -94,6 +97,9 @@ async function main(): Promise<void> {
       new BrusselsMobilityTrafficCountsCollector(),
       new DeLijnGTFSRealtimeCollector(),
       new DeLijnGTFSStaticCollector(),
+      new DottGeofenceCollector(),
+      new DottVehiclePositionCollector(),
+      new DottVehicleTypeCollector(),
       new LimeVehiclePositionCollector(),
     ],
   })

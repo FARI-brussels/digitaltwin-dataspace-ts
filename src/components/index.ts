@@ -34,3 +34,7 @@ export { BrusselsMobilityTrafficCountsCollector } from './brussels_mobility/brus
 
 export { DeLijnGTFSRealtimeCollector } from './delijn/delijn_gtfs_realtime_collector.js'
 export { DeLijnGTFSStaticCollector } from './delijn/delijn_gtfs_static_collector.js'
+
+export { DottGeofenceCollector } from './dott/dott_geofence_collector.js'
+export { DottVehiclePositionCollector } from './dott/dott_vehicle_position_collector.js'
+export { DottVehicleTypeCollector } from './dott/dott_vehicle_type_collector.js'
