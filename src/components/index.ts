@@ -42,3 +42,5 @@ export { DottVehicleTypeCollector } from './dott/dott_vehicle_type_collector.js'
 
 export { LimeVehiclePositionCollector } from './lime/lime_vehicle_position_collector.js'
 export { LimeVehicleTypeCollector } from './lime/lime_vehicle_type_collector.js'
+
+export { OpenSkyCollector } from './opensky/opensky_collector.js'

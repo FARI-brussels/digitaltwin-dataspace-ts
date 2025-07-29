@@ -33,7 +33,8 @@ import {
   DottVehiclePositionCollector,
   DottVehicleTypeCollector,
   LimeVehiclePositionCollector,
-  LimeVehicleTypeCollector
+  LimeVehicleTypeCollector,
+  OpenSkyCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -109,6 +110,7 @@ async function main(): Promise<void> {
       new DottVehicleTypeCollector(),
       new LimeVehiclePositionCollector(),
       new LimeVehicleTypeCollector(),
+      new OpenSkyCollector(),
     ],
   })
 
