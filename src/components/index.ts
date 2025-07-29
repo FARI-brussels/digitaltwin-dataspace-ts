@@ -4,7 +4,10 @@ export { IrcelineSosCollector } from './irceline_sos_collector.js'
 
 export { EnergyCollector } from './energy_collector.js'
 
-export { STIBVehiclePositionCollector } from './stib/stib_vehicle_position.js'
+export { STIBGTFSCollector } from './stib/stib_gtfs_collector.js'
+export { STIBShapeFilesCollector } from './stib/stib_shapefiles_collector.js'
+export { STIBVehiclePositionsCollector } from './stib/stib_vehicle_positions_collector.js'
+export { STIBStopsCollector } from './stib/stib_stops_collector.js'
 
 export { BoltGeofenceCollector } from './bolt/bolt_geofence_collector.js'
 export { BoltVehiclePositionCollector } from './bolt/bolt_vehicle_position_collector.js'
