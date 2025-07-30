@@ -10,7 +10,7 @@ export class DeLijnGTFSRealtimeCollector extends Collector {
         return {
             name: 'delijn_gtfs_realtime_collector',
             description: 'Collecte les données GTFS temps réel de De Lijn',
-            contentType: 'application/zip',
+            contentType: 'application/octet-stream',
             endpoint: 'api/delijn/gtfs-realtime',
             tags: ['DeLijn', 'GTFS', 'Realtime']
         }

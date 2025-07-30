@@ -10,7 +10,7 @@ export class TECGTFSRealtimeCollector extends Collector {
         return {
             name: 'tec_gtfs_realtime_collector',
             description: 'Collecte les données GTFS temps réel de TEC',
-            contentType: 'application/zip',
+            contentType: 'application/octet-stream',
             endpoint: 'api/tec/gtfs-realtime',
             tags: ['TEC', 'GTFS', 'Realtime']
         }
