@@ -44,3 +44,7 @@ export { LimeVehiclePositionCollector } from './lime/lime_vehicle_position_colle
 export { LimeVehicleTypeCollector } from './lime/lime_vehicle_type_collector.js'
 
 export { OpenSkyCollector } from './opensky/opensky_collector.js'
+
+export { SensorCommunityCollector } from './sensor_community/sensor_community_collector.js'
+
+export { SibelgaCollector } from './sibelga/sibelga_collector.js'
