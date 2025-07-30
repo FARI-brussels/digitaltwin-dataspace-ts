@@ -10,7 +10,7 @@ export class SNCBGTFSRealtimeCollector extends Collector {
         return {
             name: 'sncb_gtfs_realtime_collector',
             description: 'Collecte les données GTFS temps réel de la SNCB',
-            contentType: 'application/octet-stream',
+            contentType: 'application/x-protobuf',
             endpoint: 'api/sncb/gtfs-realtime',
             tags: ['SNCB', 'GTFS', 'realtime']
         }
