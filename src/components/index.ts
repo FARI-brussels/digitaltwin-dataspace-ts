@@ -48,3 +48,5 @@ export { OpenSkyCollector } from './opensky/opensky_collector.js'
 export { SensorCommunityCollector } from './sensor_community/sensor_community_collector.js'
 
 export { SibelgaCollector } from './sibelga/sibelga_collector.js'
+
+export { TelraamTrafficCollector } from './telraam/telraam_traffic_collector.js'

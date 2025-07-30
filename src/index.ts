@@ -36,7 +36,8 @@ import {
   LimeVehicleTypeCollector,
   OpenSkyCollector,
   SensorCommunityCollector,
-  SibelgaCollector
+  SibelgaCollector,
+  TelraamTrafficCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -115,6 +116,7 @@ async function main(): Promise<void> {
       new OpenSkyCollector(),
       new SensorCommunityCollector(),
       new SibelgaCollector(),
+      new TelraamTrafficCollector(),
     ],
   })
 
