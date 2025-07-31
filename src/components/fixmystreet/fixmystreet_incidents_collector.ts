@@ -101,6 +101,6 @@ export class FixMyStreetIncidentsCollector extends Collector {
     }
 
     getSchedule(): string {
-        return '0 * * * * *' // Every hour
+        return '0 * * * * *' // Every minute
     }
 }

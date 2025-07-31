@@ -52,6 +52,7 @@ export { SibelgaCollector } from './sibelga/sibelga_collector.js'
 export { TelraamTrafficCollector } from './telraam/telraam_traffic_collector.js'
 
 export { FixMyStreetIncidentsCollector } from './fixmystreet/fixmystreet_incidents_collector.js'
+export { FixMyStreetHistoryHarvester } from './fixmystreet/fixmystreet_history_harvester.js'
 
 export { TilesetsAssetsManager } from './tilesets_assets_manager.js'
 export { PointCloudAssetsManager } from './pointcloud_assets_manager.js'

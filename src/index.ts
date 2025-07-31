@@ -38,7 +38,8 @@ import {
   SensorCommunityCollector,
   SibelgaCollector,
   TelraamTrafficCollector,
-  FixMyStreetIncidentsCollector
+  FixMyStreetIncidentsCollector,
+  FixMyStreetHistoryHarvester
 } from './components/index.js'
 
 import { TilesetsAssetsManager } from "./components/tilesets_assets_manager";
@@ -123,6 +124,9 @@ async function main(): Promise<void> {
       new SibelgaCollector(),
       new TelraamTrafficCollector(),
       new FixMyStreetIncidentsCollector(),
+    ],
+    harvesters: [
+      new FixMyStreetHistoryHarvester(),
     ],
     assetsManagers: [
       new TilesetsAssetsManager(),
