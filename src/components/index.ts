@@ -50,6 +50,9 @@ export { SensorCommunityCollector } from './sensor_community/sensor_community_co
 export { SibelgaCollector } from './sibelga/sibelga_collector.js'
 
 export { TelraamTrafficCollector } from './telraam/telraam_traffic_collector.js'
+
+export { FixMyStreetIncidentsCollector } from './fixmystreet/fixmystreet_incidents_collector.js'
+
 export { TilesetsAssetsManager } from './tilesets_assets_manager.js'
 export { PointCloudAssetsManager } from './pointcloud_assets_manager.js'
 export { DigitalTerrainAssetsManager } from './digitalterrain_assets_manager.js'

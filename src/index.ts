@@ -37,11 +37,13 @@ import {
   OpenSkyCollector,
   SensorCommunityCollector,
   SibelgaCollector,
-  TelraamTrafficCollector
+  TelraamTrafficCollector,
+  FixMyStreetIncidentsCollector
 } from './components/index.js'
-import {TilesetsAssetsManager} from "./components/tilesets_assets_manager";
-import {PointCloudAssetsManager} from "./components/pointcloud_assets_manager";
-import {DigitalTerrainAssetsManager} from "./components/digitalterrain_assets_manager";
+
+import { TilesetsAssetsManager } from "./components/tilesets_assets_manager";
+import { PointCloudAssetsManager } from "./components/pointcloud_assets_manager";
+import { DigitalTerrainAssetsManager } from "./components/digitalterrain_assets_manager";
 
 async function main(): Promise<void> {
   console.log('🔷 Starting fari-v2 Digital Twin...')
@@ -120,12 +122,13 @@ async function main(): Promise<void> {
       new SensorCommunityCollector(),
       new SibelgaCollector(),
       new TelraamTrafficCollector(),
+      new FixMyStreetIncidentsCollector(),
     ],
-      assetsManagers: [
-          new TilesetsAssetsManager(),
-          new PointCloudAssetsManager(),
-          new DigitalTerrainAssetsManager(),
-      ]
+    assetsManagers: [
+      new TilesetsAssetsManager(),
+      new PointCloudAssetsManager(),
+      new DigitalTerrainAssetsManager(),
+    ]
   })
 
   console.log('🔧 Digital Twin Engine configured')
