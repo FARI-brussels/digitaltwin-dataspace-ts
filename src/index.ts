@@ -15,6 +15,9 @@ async function main(): Promise<void> {
         // Redis configuration
         REDIS_HOST: Env.schema.string({optional: true}),
         REDIS_PORT: Env.schema.number({optional: true}),
+        STIB_API_KEY: Env.schema.string(),
+        DE_LIJN_API_KEY: Env.schema.string(),
+        TELRAAM_API_KEY: Env.schema.string(),
     })
 
     console.log('✅ Environment variables validated')
