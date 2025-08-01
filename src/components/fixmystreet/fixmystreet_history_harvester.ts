@@ -1,4 +1,4 @@
-import { DataRecord, Harvester, HarvesterConfiguration } from 'digitaltwin-core'
+import {DataRecord, Harvester, HarvesterConfiguration} from 'digitaltwin-core'
 
 export class FixMyStreetHistoryHarvester extends Harvester {
     getUserConfiguration(): HarvesterConfiguration {
@@ -14,15 +14,34 @@ export class FixMyStreetHistoryHarvester extends Harvester {
         };
     }
 
-    harvest(sourceData: DataRecord | DataRecord[], dependenciesData: Record<string, DataRecord | DataRecord[]>): Promise<Buffer | Buffer[]> {
+    async harvest(sourceData: DataRecord | DataRecord[], dependenciesDatas: Record<string, DataRecord | DataRecord[] | null>): Promise<Buffer | Buffer[]> {
         // Ensure sourceData is a single DataRecord
         const currentDataRecord = Array.isArray(sourceData) ? sourceData[0] : sourceData;
-        const currentData = JSON.parse(currentDataRecord.data.toString());
+        const currentDataBuffer = await currentDataRecord.data();
+        const currentData = JSON.parse(currentDataBuffer.toString());
 
         // Get previous version from dependencies
-        const previousVersion = dependenciesData['fixmystreet_collector'];
+        const previousVersion = dependenciesDatas['fixmystreet_collector'];
+
+        // Handle case where no previous data exists (first run)
+        if (!previousVersion) {
+            // No previous data to compare, mark all features as new with null history
+            const currentFeatures = currentData.features || [];
+            for (const feature of currentFeatures) {
+                feature.history = null;
+            }
+
+            const result = {
+                type: "FeatureCollection",
+                features: currentFeatures
+            };
+
+            return Promise.resolve(Buffer.from(JSON.stringify(result), 'utf-8'));
+        }
+
         const previousDataRecord = Array.isArray(previousVersion) ? previousVersion[0] : previousVersion;
-        const previousData = JSON.parse(previousDataRecord.data.toString());
+        const previousDataBuffer = await previousDataRecord.data();
+        const previousData = JSON.parse(previousDataBuffer.toString());
 
         const currentFeatures = currentData.features || [];
         const previousFeatures = previousData.features || [];
