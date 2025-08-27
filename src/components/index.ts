@@ -54,6 +54,13 @@ export { TelraamTrafficCollector } from './telraam/telraam_traffic_collector.js'
 export { FixMyStreetIncidentsCollector } from './fixmystreet/fixmystreet_incidents_collector.js'
 export { FixMyStreetHistoryHarvester } from './fixmystreet/fixmystreet_history_harvester.js'
 
-export { TilesetsAssetsManager } from './tilesets_assets_manager.js'
+// === ASSETS MANAGER ===
+export { AssetsManager } from './assets_manager.js'
 export { PointCloudAssetsManager } from './pointcloud_assets_manager.js'
-export { DigitalTerrainAssetsManager } from './digitalterrain_assets_manager.js'
+
+// === TILESETS MANAGER ===
+export { TilesetManager } from './tilesets_manager.js'
+export { DigitalTerrainManager } from './digitalterrain_manager.js'
+
+// === TILESETS MANAGER ===
+export { WMSLayersManager } from './wms_manager.js'
