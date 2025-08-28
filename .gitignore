@@ -6,3 +6,4 @@ uploads/
 data/
 .DS_Store
 .idea/
+package-lock.json

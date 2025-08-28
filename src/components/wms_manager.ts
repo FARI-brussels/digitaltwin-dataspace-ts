@@ -23,7 +23,7 @@ export class WMSLayersManager extends CustomTableManager {
     // Custom endpoint: Add multiple layers at once
     async addMultipleLayers(req: any): Promise<DataResponse> {
         try {
-            const { layers } = req.body
+            const layers = req.body
             const results = []
 
             for (const layerData of layers) {

@@ -1,4 +1,4 @@
-import { TilesetManager as CoreTilesetManager } from 'digitaltwin-core/dist/components'
+import { TilesetManager as CoreTilesetManager } from "digitaltwin-core"
 
 export class TilesetManager extends CoreTilesetManager {
 

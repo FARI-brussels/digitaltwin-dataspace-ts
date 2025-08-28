@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import {DigitalTwinEngine, Env, KnexDatabaseAdapter, LocalStorageService} from 'digitaltwin-core'
-import {FixMyStreetHistoryHarvester, FixMyStreetIncidentsCollector} from './components/index.js'
+import {AssetsManager, DigitalTerrainManager, FixMyStreetHistoryHarvester, FixMyStreetIncidentsCollector, PointCloudAssetsManager, TilesetManager, WMSLayersManager} from './components/index.js'
 
 async function main(): Promise<void> {
     console.log('🔷 Starting fari-v2 Digital Twin...')
@@ -46,11 +46,20 @@ async function main(): Promise<void> {
             port: 6379
         },
         collectors: [
-            new FixMyStreetIncidentsCollector(),
+            // new FixMyStreetIncidentsCollector(),
         ],
         harvesters: [
-            new FixMyStreetHistoryHarvester(),
+            // new FixMyStreetHistoryHarvester(),
         ],
+        assetsManagers: [
+            new AssetsManager(),
+            new PointCloudAssetsManager(),
+            new TilesetManager(),
+            new DigitalTerrainManager()
+        ],
+        customTableManagers: [
+            new WMSLayersManager(),
+        ]
     })
 
     console.log('🔧 Digital Twin Engine configured')
@@ -72,6 +81,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: Error) => {
-    console.error('❌ Failed to start Digital Twin Engine:', error.message)
+    console.error('❌ Failed to start Digital Twin Engine:', error)
     process.exit(1)
 })

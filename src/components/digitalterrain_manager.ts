@@ -1,4 +1,4 @@
-import { TilesetManager } from 'digitaltwin-core/dist/components'
+import { TilesetManager } from "digitaltwin-core"
 
 export class DigitalTerrainManager extends TilesetManager {
     getConfiguration() {

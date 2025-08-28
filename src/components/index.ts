@@ -62,5 +62,5 @@ export { PointCloudAssetsManager } from './pointcloud_assets_manager.js'
 export { TilesetManager } from './tilesets_manager.js'
 export { DigitalTerrainManager } from './digitalterrain_manager.js'
 
-// === TILESETS MANAGER ===
+// === CUSTOM TABLE MANAGER ===
 export { WMSLayersManager } from './wms_manager.js'
