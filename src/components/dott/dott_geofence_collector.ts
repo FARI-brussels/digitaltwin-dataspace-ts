@@ -23,6 +23,6 @@ export class DottGeofenceCollector extends Collector {
     }
 
     getSchedule(): string {
-        return '0 */10 * * * *' // Every 10 minutes
+        return '0 0 * * * *' // Every hour
     }
 }

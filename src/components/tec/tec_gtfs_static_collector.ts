@@ -23,6 +23,6 @@ export class TECGTFSStaticCollector extends Collector {
     }
 
     getSchedule(): string {
-        return '0 */30 * * * *' // Every 30 minutes
+        return '0 0 * * * *' // Every hour
     }
 }

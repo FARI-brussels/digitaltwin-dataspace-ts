@@ -22,6 +22,6 @@ export class EnergyCollector extends Collector {
 	}
 
 	getSchedule(): string {
-		return '0 */5 * * * *' // Every 5 minutes by default
+		return '0 0 * * * *' // Every hour by default
 	}
 }

@@ -23,6 +23,6 @@ export class SNCBGTFSStaticCollector extends Collector {
     }
 
     getSchedule(): string {
-        return '*/10 * * * * *' // Every 10 seconds
+        return '0 0 * * * *' // Every hour
     }
 }

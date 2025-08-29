@@ -79,6 +79,6 @@ export class OpenSkyCollector extends Collector {
     }
 
     getSchedule(): string {
-        return '0 * * * * *' // Every minute
+        return '0 0 * * * *' // Every hour
     }
 }
