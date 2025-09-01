@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import {DigitalTwinEngine, Env, KnexDatabaseAdapter, LocalStorageService} from 'digitaltwin-core'
+import { DigitalTwinEngine, Env, KnexDatabaseAdapter, LocalStorageService, OvhS3StorageService } from 'digitaltwin-core'
 import {
     AssetsManager,
     DigitalTerrainManager,
@@ -43,14 +43,27 @@ async function main(): Promise<void> {
 
     // Validate environment variables
     const env = Env.validate({
-        PORT: Env.schema.number({optional: true}),
+        NODE_ENV: Env.schema.string({}),
+        PORT: Env.schema.number({ optional: true }),
         // SQLite configuration
-        DB_PATH: Env.schema.string({optional: true}),
+        DB_PATH: Env.schema.string({ optional: true }),
+        // PostgreSQL configuration
+        DB_HOST: Env.schema.string({ optional: true }),
+        DB_PORT: Env.schema.number({ optional: true }),
+        DB_USER: Env.schema.string({ optional: true }),
+        DB_PASSWORD: Env.schema.string({ optional: true }),
+        DB_NAME: Env.schema.string({ optional: true }),
         // Local storage configuration
-        STORAGE_PATH: Env.schema.string({optional: true}),
+        STORAGE_PATH: Env.schema.string({ optional: true }),
+        // OVH Object Storage configuration
+        OVH_ACCESS_KEY: Env.schema.string({ optional: true }),
+        OVH_SECRET_KEY: Env.schema.string({ optional: true }),
+        OVH_ENDPOINT: Env.schema.string({ format: 'url', optional: true }),
+        OVH_REGION: Env.schema.string({ optional: true }),
+        OVH_BUCKET: Env.schema.string({ optional: true }),
         // Redis configuration
-        REDIS_HOST: Env.schema.string({optional: true}),
-        REDIS_PORT: Env.schema.number({optional: true}),
+        REDIS_HOST: Env.schema.string({ optional: true }),
+        REDIS_PORT: Env.schema.number({ optional: true }),
         STIB_API_KEY: Env.schema.string(),
         DE_LIJN_API_KEY: Env.schema.string(),
         TELRAAM_API_KEY: Env.schema.string(),
@@ -58,17 +71,39 @@ async function main(): Promise<void> {
 
     console.log('✅ Environment variables validated')
 
-    // Initialize storage service first
-    const storage = new LocalStorageService(env.STORAGE_PATH || './uploads')
+    // Choose config based on NODE_ENV
+    const isProd = env.NODE_ENV !== 'development'
+
+    // Storage service
+    const storage = isProd
+        ? new OvhS3StorageService({
+            accessKey: env.OVH_ACCESS_KEY!,
+            secretKey: env.OVH_SECRET_KEY!,
+            endpoint: env.OVH_ENDPOINT!,
+            region: env.OVH_REGION || 'gra',
+            bucket: env.OVH_BUCKET!
+        })
+        : new LocalStorageService(env.STORAGE_PATH || './uploads')
 
     // Database configuration
-    const dbConfig = {
-        client: 'better-sqlite3',
-        connection: {
-            filename: env.DB_PATH || './data/fari-v2.db'
-        },
-        useNullAsDefault: true
-    }
+    const dbConfig = isProd
+        ? {
+            client: 'pg',
+            connection: {
+                host: env.DB_HOST!,
+                port: env.DB_PORT || 5432,
+                user: env.DB_USER!,
+                password: env.DB_PASSWORD!,
+                database: env.DB_NAME!
+            }
+        }
+        : {
+            client: 'better-sqlite3',
+            connection: {
+                filename: env.DB_PATH || './data/fari-v2.db'
+            },
+            useNullAsDefault: true
+        }
 
     // Initialize database adapter
     const database = new KnexDatabaseAdapter(dbConfig, storage)
@@ -132,8 +167,8 @@ async function main(): Promise<void> {
     await engine.start()
     const port = engine.getPort() || env.PORT || 3000
     console.log(`🚀 Digital Twin Engine started on port ${port}`)
-    console.log(`📊 Database: SQLite`)
-    console.log(`💾 Storage: Local filesystem (${env.STORAGE_PATH || './uploads'})`)
+    console.log(`📊 Database: ${isProd ? 'PostgreSQL' : 'SQLite'}`)
+    console.log(`💾 Storage: ${isProd ? 'OVH S3' : `Local filesystem (${env.STORAGE_PATH || './uploads'})`}`)
     console.log(`🔄 Queue: Redis enabled`)
 
     // Graceful shutdown
