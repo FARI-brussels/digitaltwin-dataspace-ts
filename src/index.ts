@@ -113,8 +113,8 @@ async function main(): Promise<void> {
         database,
         storage,
         redis: {
-            host: 'localhost',
-            port: 6379
+            host: env.REDIS_HOST || 'localhost',
+            port: env.REDIS_PORT || 6379
         },
         collectors: [
             new IrcelineSosCollector(),
