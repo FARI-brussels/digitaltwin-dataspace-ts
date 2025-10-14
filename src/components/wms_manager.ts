@@ -25,16 +25,13 @@ export class WMSLayersManager extends CustomTableManager {
             },
             endpoints: [
                 // Gestion des serveurs WMS
-                { path: '/servers', method: 'get', handler: 'getAllWmsServers' },
                 { path: '/servers/grouped', method: 'get', handler: 'getLayersGroupedByServer' },
                 { path: '/servers/:wmsUrl/layers', method: 'get', handler: 'getLayersByServer' },
                 { path: '/servers/:wmsUrl/layers', method: 'delete', handler: 'deleteLayersByServer' },
                 { path: '/servers/:wmsUrl/layers', method: 'post', handler: 'addLayersToServer' },
 
                 // Gestion des couches
-                { path: '/layers/active', method: 'get', handler: 'getActiveLayers' },
                 { path: '/layers/:id/toggle', method: 'put', handler: 'toggleLayerStatus' },
-                { path: '/layers', method: 'delete', handler: 'deleteAllLayers' },
 
                 // Bulk operations
                 { path: '/bulk', method: 'post', handler: 'addMultipleLayers' }
@@ -50,11 +47,26 @@ export class WMSLayersManager extends CustomTableManager {
         try {
             const allLayers = await this.findAll()
 
+            // Si aucune couche, retourner un résultat vide
+            if (allLayers.length === 0) {
+                return {
+                    status: 200,
+                    content: JSON.stringify({
+                        count: 0,
+                        servers: []
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            }
+
             // Grouper par URL WMS
             const serverMap = new Map<string, { url: string; layers: number; active_layers: number }>()
 
             for (const layer of allLayers) {
                 const wmsUrl = layer.wms_url as string
+
+                // Vérifier que wms_url existe
+                if (!wmsUrl) continue
 
                 if (!serverMap.has(wmsUrl)) {
                     serverMap.set(wmsUrl, { url: wmsUrl, layers: 0, active_layers: 0 })
@@ -335,8 +347,23 @@ export class WMSLayersManager extends CustomTableManager {
         try {
             const allLayers = await this.findAll()
 
+            // Si aucune couche, retourner directement
+            if (allLayers.length === 0) {
+                return {
+                    status: 200,
+                    content: JSON.stringify({
+                        message: 'No layers to delete',
+                        deleted_count: 0
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            }
+
+            // Supprimer toutes les couches
             for (const layer of allLayers) {
-                await this.delete(layer.id)
+                if (layer.id) {
+                    await this.delete(layer.id)
+                }
             }
 
             return {
