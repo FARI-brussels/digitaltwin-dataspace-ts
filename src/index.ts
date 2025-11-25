@@ -46,8 +46,6 @@ import {
 } from './components/index.js'
 
 async function main(): Promise<void> {
-    console.log('🔷 Starting fari-v2 Digital Twin...')
-
     // Validate environment variables
     const env = Env.validate({
         NODE_ENV: Env.schema.string({}),
@@ -75,8 +73,6 @@ async function main(): Promise<void> {
         DE_LIJN_API_KEY: Env.schema.string(),
         TELRAAM_API_KEY: Env.schema.string(),
     })
-
-    console.log('✅ Environment variables validated')
 
     // Choose config based on NODE_ENV
     const isProd = env.NODE_ENV !== 'development'
@@ -175,25 +171,20 @@ async function main(): Promise<void> {
         ]
     })
 
-    console.log('🔧 Digital Twin Engine configured')
-
     // Start the engine
     await engine.start()
     const port = engine.getPort() || env.PORT || 3000
-    console.log(`🚀 Digital Twin Engine started on port ${port}`)
-    console.log(`📊 Database: ${isProd ? 'PostgreSQL' : 'SQLite'}`)
-    console.log(`💾 Storage: ${isProd ? 'OVH S3' : `Local filesystem (${env.STORAGE_PATH || './uploads'})`}`)
-    console.log(`🔄 Queue: Redis enabled`)
+    console.log(`[DigitalTwin] Server running on port ${port} | DB: ${isProd ? 'PostgreSQL' : 'SQLite'} | Storage: ${isProd ? 'OVH S3' : 'Local'}`)
 
     // Graceful shutdown
     process.on('SIGINT', async () => {
-        console.log('\n🛑 Shutting down gracefully...')
+        console.log('[DigitalTwin] Shutting down...')
         await engine.stop()
         process.exit(0)
     })
 }
 
 main().catch((error: Error) => {
-    console.error('❌ Failed to start Digital Twin Engine:', error)
+    console.error('[DigitalTwin] Failed to start:', error)
     process.exit(1)
 })

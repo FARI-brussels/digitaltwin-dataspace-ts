@@ -19,5 +19,5 @@ RUN npm run build
 # Expose port
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application with increased header size for large file uploads
+CMD ["node", "--max-http-header-size=65536", "dist/index.js"]
