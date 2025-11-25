@@ -193,9 +193,16 @@ export class WMSLayersManager extends CustomTableManager {
     /**
      * DELETE /wms_layers/servers/:wmsUrl/layers
      * Supprime toutes les couches d'un serveur WMS donné
+     * Requires authentication
      */
     async deleteLayersByServer(req: RequestWithParams): Promise<DataResponse> {
         try {
+            // Require authentication for delete operations
+            const userOrError = await this.requireAuthentication(req)
+            if ('status' in userOrError) {
+                return userOrError
+            }
+
             const wmsUrl = req.params?.wmsUrl ? decodeURIComponent(req.params.wmsUrl) : ''
 
             if (!wmsUrl) {
@@ -231,9 +238,17 @@ export class WMSLayersManager extends CustomTableManager {
      * POST /wms_layers/servers/:wmsUrl/layers
      * Ajoute des couches à un serveur WMS spécifique
      * Body: { layers: string[], description?: string }
+     * Requires authentication
      */
     async addLayersToServer(req: RequestWithParams): Promise<DataResponse> {
         try {
+            // Require authentication for create operations
+            const userOrError = await this.requireAuthentication(req)
+            if ('status' in userOrError) {
+                return userOrError
+            }
+            const userRecord = userOrError
+
             const wmsUrl = req.params?.wmsUrl ? decodeURIComponent(req.params.wmsUrl) : ''
 
             if (!wmsUrl) {
@@ -262,6 +277,7 @@ export class WMSLayersManager extends CustomTableManager {
                     layer_name: layerName,
                     description: body.description || '',
                     active: true,
+                    owner_id: userRecord.id
                 })
                 results.push({ id, wms_url: wmsUrl, layer_name: layerName })
             }
@@ -289,9 +305,17 @@ export class WMSLayersManager extends CustomTableManager {
      * POST /wms_layers/bulk
      * Ajoute plusieurs couches en une fois (multi-serveurs)
      * Body: [{ url, name, description?, active? }, ...]
+     * Requires authentication
      */
     async addMultipleLayers(req: RequestWithParams): Promise<DataResponse> {
         try {
+            // Require authentication for create operations
+            const userOrError = await this.requireAuthentication(req)
+            if ('status' in userOrError) {
+                return userOrError
+            }
+            const userRecord = userOrError
+
             const body = req.body
 
             if (!Array.isArray(body)) {
@@ -316,6 +340,7 @@ export class WMSLayersManager extends CustomTableManager {
                     layer_name: layerData.name,
                     description: layerData.description || '',
                     active: layerData.active !== undefined ? layerData.active : true,
+                    owner_id: userRecord.id
                 })
                 results.push({ id, wms_url: layerData.url, layer_name: layerData.name })
             }
@@ -342,9 +367,16 @@ export class WMSLayersManager extends CustomTableManager {
     /**
      * DELETE /wms_layers/layers
      * Supprime TOUTES les couches de tous les serveurs WMS
+     * Requires authentication
      */
     async deleteAllLayers(req: RequestWithParams): Promise<DataResponse> {
         try {
+            // Require authentication for delete operations
+            const userOrError = await this.requireAuthentication(req)
+            if ('status' in userOrError) {
+                return userOrError
+            }
+
             const allLayers = await this.findAll()
 
             // Si aucune couche, retourner directement
@@ -388,9 +420,16 @@ export class WMSLayersManager extends CustomTableManager {
     /**
      * PUT /wms_layers/layers/:id/toggle
      * Active/désactive une couche (toggle)
+     * Requires authentication
      */
     async toggleLayerStatus(req: RequestWithParams): Promise<DataResponse> {
         try {
+            // Require authentication for update operations
+            const userOrError = await this.requireAuthentication(req)
+            if ('status' in userOrError) {
+                return userOrError
+            }
+
             const id = req.params?.id
 
             if (!id) {
