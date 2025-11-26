@@ -1,1221 +1,191 @@
-openapi: 3.0.3
+openapi: "3.0.3"
 info:
-  title: Fari Digital Twin API
-  description: API for managing digital twin data collectors, harvesters, assets managers and custom table managers
-  version: 2.0.0
-
-servers:
-  - url: http://localhost:3000
-    description: Local development server
-
-tags:
-  # Mobility
-  - name: Mobility - Bolt
-    description: Bolt vehicle and geofence data collection
-  - name: Mobility - Brussels
-    description: Brussels mobility data (bikes, traffic)
-  - name: Mobility - Dott
-    description: Dott vehicle and geofence data collection
-  - name: Mobility - Lime
-    description: Lime vehicle data collection
-  - name: Mobility - Pony
-    description: Pony vehicle and geofence data collection
-
-  # Transit
-  - name: Transit - De Lijn
-    description: De Lijn public transport data (Flanders)
-  - name: Transit - SNCB
-    description: Belgian national railway data
-  - name: Transit - STIB
-    description: Brussels public transport data
-  - name: Transit - TEC
-    description: Wallonia public transport data
-
-  # Rail Infrastructure
-  - name: Rail - Infrabel
-    description: Belgian rail infrastructure data
-
-  # Environment
-  - name: Air Quality
-    description: Environmental and air quality data
-  - name: Sensors
-    description: Community sensor data
-
-  # Other
-  - name: Energy
-    description: Energy consumption data
-  - name: Urban Issues
-    description: FixMyStreet issue reporting data
-  - name: Aviation
-    description: OpenSky aircraft tracking data
-  - name: Traffic
-    description: Telraam traffic counting data
-  - name: Utilities
-    description: Sibelga utility data
-
-  # Assets Management
-  - name: Assets
-    description: 3D assets management (glTF/GLB files)
-  - name: Point Clouds
-    description: Point cloud data management (LAZ, LAS, PLY)
-  - name: Tilesets
-    description: 3D Tiles tileset management
-  - name: Digital Terrain
-    description: Digital terrain model management
-
-  # Custom Tables
-  - name: WMS Layers
-    description: WMS layer configuration management
-
+  title: FARI Digital Twin API
+  version: "1.0.0"
+  description: API documentation for digital_twin_ts
 paths:
-  # ============================================================
-  # BOLT COLLECTORS
-  # ============================================================
-  /api/bolt/geofence:
-    get:
-      summary: Get Bolt geofence zones and restrictions
-      tags: [Mobility - Bolt]
-      responses:
-        "200":
-          description: Geofencing zones with rules
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BoltGeofenceCollectorResponse"
-
-  /api/bolt/vehicle-position:
-    get:
-      summary: Get Bolt vehicle positions
-      tags: [Mobility - Bolt]
-      responses:
-        "200":
-          description: List of Bolt vehicle positions
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/BoltVehiclePositionFeatureCollection"
-
-  /api/bolt/vehicle-type:
-    get:
-      summary: Get Bolt vehicle types
-      tags: [Mobility - Bolt]
-      responses:
-        "200":
-          description: List of Bolt vehicle types
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BoltVehicleTypeCollectorResponse"
-
-  # ============================================================
-  # BRUSSELS MOBILITY COLLECTORS
-  # ============================================================
-  /api/brussels-mobility/bike-counters:
-    get:
-      summary: Get list of bike counters
-      tags: [Mobility - Brussels]
-      responses:
-        "200":
-          description: List of bike counters
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/BrusselsMobilityBikeCountersFeatureCollection"
-
-  /api/brussels-mobility/bike-counts:
-    get:
-      summary: Get bike counter measurement data
-      tags: [Mobility - Brussels]
-      responses:
-        "200":
-          description: Measurement data per bike counter
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BrusselsMobilityBikeCountsResponse"
-
-  /api/brussels-mobility/traffic-devices:
-    get:
-      summary: Get list of traffic devices
-      tags: [Mobility - Brussels]
-      responses:
-        "200":
-          description: List of traffic devices
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/BrusselsMobilityTrafficDevicesFeatureCollection"
-
-  /api/brussels-mobility/traffic-counts:
-    get:
-      summary: Get real-time traffic counts
-      tags: [Mobility - Brussels]
-      responses:
-        "200":
-          description: Live traffic count data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BrusselsMobilityTrafficCountsResponse"
-
-  # ============================================================
-  # DE LIJN COLLECTORS
-  # ============================================================
-  /api/delijn/gtfs-static:
-    get:
-      summary: Get De Lijn GTFS static feed (ZIP)
-      tags: [Transit - De Lijn]
-      responses:
-        "200":
-          description: GTFS static ZIP file
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-
-  /api/delijn/gtfs-realtime:
-    get:
-      summary: Get De Lijn GTFS realtime feed (ZIP)
-      tags: [Transit - De Lijn]
-      responses:
-        "200":
-          description: GTFS realtime ZIP file
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-
-  # ============================================================
-  # DOTT COLLECTORS
-  # ============================================================
-  /api/dott/geofence:
-    get:
-      summary: Get Dott geofencing zones in Brussels
-      tags: [Mobility - Dott]
-      responses:
-        "200":
-          description: Geofencing zones
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FeatureCollection"
-
-  /api/dott/vehicle-position:
-    get:
-      summary: Get Dott vehicle positions in Brussels
-      tags: [Mobility - Dott]
-      responses:
-        "200":
-          description: Vehicle positions
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/FeatureCollection"
-
-  /api/dott/vehicle-type:
-    get:
-      summary: Get Dott vehicle types
-      tags: [Mobility - Dott]
-      responses:
-        "200":
-          description: Vehicle types
-          content:
-            application/json:
-              schema:
-                type: object
-
-  # ============================================================
-  # ENERGY COLLECTOR
-  # ============================================================
-  /api/energy:
-    get:
-      summary: Get energy consumption data
-      tags: [Energy]
-      responses:
-        "200":
-          description: Energy consumption data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EnergyConsumptionFeatureCollection"
-
-  # ============================================================
-  # FIXMYSTREET COLLECTORS & HARVESTERS
-  # ============================================================
-  /api/fixmystreet/incidents:
-    get:
-      summary: Get FixMyStreet GeoJSON reports
-      tags: [Urban Issues]
-      responses:
-        "200":
-          description: GeoJSON FeatureCollection of urban issues
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/FixMyStreetFeatureCollection"
-
-  /api/fixmystreet/history:
-    get:
-      summary: Get FixMyStreet reports with history (GeoJSON)
-      tags: [Urban Issues]
-      responses:
-        "200":
-          description: GeoJSON FeatureCollection including issue history
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/FixMyStreetHistoryFeatureCollection"
-
-  # ============================================================
-  # INFRABEL COLLECTORS
-  # ============================================================
-  /api/infrabel/line-sections:
-    get:
-      summary: Get Infrabel network line sections (GeoJSON)
-      tags: [Rail - Infrabel]
-      responses:
-        "200":
-          description: Line sections data
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/FeatureCollection"
-
-  /api/infrabel/operational-points:
-    get:
-      summary: Get Infrabel network operational points (GeoJSON)
-      tags: [Rail - Infrabel]
-      responses:
-        "200":
-          description: Operational points data
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/FeatureCollection"
-
-  /api/infrabel/punctuality:
-    get:
-      summary: Get D-1 punctuality data of the Infrabel network
-      tags: [Rail - Infrabel]
-      responses:
-        "200":
-          description: Punctuality data
-          content:
-            application/json:
-              schema:
-                type: object
-
-  /api/infrabel/segments:
-    get:
-      summary: Get Infrabel network segments data
-      tags: [Rail - Infrabel]
-      responses:
-        "200":
-          description: Segments data
-          content:
-            application/json:
-              schema:
-                type: object
-
-  # ============================================================
-  # IRCELINE COLLECTOR
-  # ============================================================
-  /api/irceline_sos:
-    get:
-      summary: Get IRCELINE air quality data
-      tags: [Air Quality]
-      responses:
-        "200":
-          description: Air quality data
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/AirQualityFeatureCollection"
-
-  # ============================================================
-  # LIME COLLECTORS
-  # ============================================================
-  /api/lime/vehicle-position:
-    get:
-      summary: Get Lime vehicle positions in Brussels
-      tags: [Mobility - Lime]
-      responses:
-        "200":
-          description: Vehicle positions
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/FeatureCollection"
-
-  /api/lime/vehicle-type:
-    get:
-      summary: Get Lime vehicle types
-      tags: [Mobility - Lime]
-      responses:
-        "200":
-          description: Vehicle types
-          content:
-            application/json:
-              schema:
-                type: object
-
-  # ============================================================
-  # OPENSKY COLLECTOR
-  # ============================================================
-  /api/opensky:
-    get:
-      summary: Get OpenSky aircraft positions (GeoJSON)
-      tags: [Aviation]
-      responses:
-        "200":
-          description: Live aircraft position data from OpenSky
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/OpenSkyFeatureCollection"
-
-  # ============================================================
-  # PONY COLLECTORS
-  # ============================================================
-  /api/pony/geofence:
-    get:
-      summary: Get Pony geofencing zones in Brussels
-      tags: [Mobility - Pony]
-      responses:
-        "200":
-          description: Geofencing zones
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FeatureCollection"
-
-  /api/pony/vehicle-position:
-    get:
-      summary: Get Pony vehicle positions in Brussels
-      tags: [Mobility - Pony]
-      responses:
-        "200":
-          description: Vehicle positions
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/FeatureCollection"
-
-  /api/pony/vehicle-type:
-    get:
-      summary: Get Pony vehicle types
-      tags: [Mobility - Pony]
-      responses:
-        "200":
-          description: Vehicle types
-          content:
-            application/json:
-              schema:
-                type: object
-
-  # ============================================================
-  # SENSOR COMMUNITY COLLECTOR
-  # ============================================================
-  /api/sensor-community:
-    get:
-      summary: Get sensor community data
-      tags: [Sensors]
-      responses:
-        "200":
-          description: List of sensor community features
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/SensorCommunityFeatureCollection"
-
-  # ============================================================
-  # SIBELGA COLLECTOR
-  # ============================================================
-  /api/sibelga:
-    get:
-      summary: Get Sibelga utility data
-      tags: [Utilities]
-      responses:
-        "200":
-          description: Sibelga data
-          content:
-            application/json:
-              schema:
-                type: object
-
-  # ============================================================
-  # SNCB COLLECTORS
-  # ============================================================
-  /api/sncb/gtfs-static:
-    get:
-      summary: Get SNCB GTFS static feed (ZIP)
-      tags: [Transit - SNCB]
-      responses:
-        "200":
-          description: GTFS static ZIP file
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-
-  /api/sncb/gtfs-realtime:
-    get:
-      summary: Get SNCB GTFS realtime feed (ZIP)
-      tags: [Transit - SNCB]
-      responses:
-        "200":
-          description: GTFS realtime ZIP file
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-
-  # ============================================================
-  # STIB COLLECTORS
-  # ============================================================
-  /api/stib/gtfs:
-    get:
-      summary: Get STIB GTFS static feed (ZIP)
-      tags: [Transit - STIB]
-      responses:
-        "200":
-          description: GTFS static ZIP file
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-
-  /api/stib/shapefiles:
-    get:
-      summary: Get STIB shapefiles data
-      tags: [Transit - STIB]
-      responses:
-        "200":
-          description: Shapefiles data
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-
-  /api/stib/vehicle-positions:
-    get:
-      summary: Get STIB vehicle positions in Brussels
-      tags: [Transit - STIB]
-      responses:
-        "200":
-          description: Vehicle positions
-          content:
-            application/json:
-              schema:
-                type: object
-
-  /api/stib/stops:
-    get:
-      summary: Get STIB stops in Brussels
-      tags: [Transit - STIB]
-      responses:
-        "200":
-          description: STIB stops data
-          content:
-            application/json:
-              schema:
-                type: object
-
-  # ============================================================
-  # TEC COLLECTORS
-  # ============================================================
-  /api/tec/gtfs-static:
-    get:
-      summary: Get TEC GTFS static feed (ZIP)
-      tags: [Transit - TEC]
-      responses:
-        "200":
-          description: GTFS static ZIP file
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-
-  /api/tec/gtfs-realtime:
-    get:
-      summary: Get TEC GTFS realtime feed (ZIP)
-      tags: [Transit - TEC]
-      responses:
-        "200":
-          description: GTFS realtime ZIP file
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-
-  # ============================================================
-  # TELRAAM COLLECTOR
-  # ============================================================
-  /api/telraam/traffic:
-    get:
-      summary: Get Telraam traffic data (GeoJSON)
-      tags: [Traffic]
-      responses:
-        "200":
-          description: Live traffic data from Telraam (GeoJSON)
-          content:
-            application/geo+json:
-              schema:
-                $ref: "#/components/schemas/TelraamFeatureCollection"
-
-  # ============================================================
-  # ASSETS MANAGER
-  # ============================================================
   /api/assets:
     get:
-      summary: List all assets
-      tags: [Assets]
+      summary: List all assets_manager assets
+      description: Manage assets
+      tags:
+        - Assets
       responses:
-        "200":
+        200:
           description: List of assets
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AssetListResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/AssetResponse"
     post:
-      summary: Upload a new asset
-      tags: [Assets]
+      summary: Upload a new assets_manager asset
+      description: Upload a new asset file with metadata. Requires authentication.
+      tags:
+        - Assets
       security:
-        - ApiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/AssetUploadRequest"
-      responses:
-        "201":
-          description: Asset created successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AssetResponse"
-        "401":
-          description: Unauthorized
-        "400":
-          description: Bad request
-
-  /api/assets/upload-batch:
-    post:
-      summary: Upload multiple assets at once
-      tags: [Assets]
-      security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - file
+                - description
+                - source
               properties:
-                files:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+                description:
+                  type: string
+                  description: Asset description
+                source:
+                  type: string
+                  format: uri
+                  description: Source URL for provenance
+                is_public:
+                  type: boolean
+                  description: "Whether asset is public (default: true)"
       responses:
-        "201":
-          description: Assets created successfully
-        "401":
-          description: Unauthorized
-
-  /api/assets/{id}:
+        200:
+          description: Asset uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        400:
+          description: Bad request - missing or invalid fields
+        401:
+          description: Unauthorized - authentication required
+  "/api/assets/{id}":
     get:
-      summary: Get asset by ID (inline display)
-      tags: [Assets]
+      summary: Get assets_manager asset by ID
+      description: Returns the asset file content
+      tags:
+        - Assets
       parameters:
         - name: id
           in: path
           required: true
           schema:
-            type: integer
+            type: string
+          description: Asset ID
       responses:
-        "200":
-          description: Asset content
+        200:
+          description: Asset file content
           content:
             model/gltf-binary:
               schema:
                 type: string
                 format: binary
-        "404":
+        404:
           description: Asset not found
     put:
-      summary: Update asset metadata
-      tags: [Assets]
+      summary: Update assets_manager asset metadata
+      description: Update asset description, source, or visibility. Requires authentication and ownership.
+      tags:
+        - Assets
       security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
       parameters:
         - name: id
           in: path
           required: true
           schema:
-            type: integer
+            type: string
+          description: Asset ID
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AssetUpdateRequest"
+              type: object
+              properties:
+                description:
+                  type: string
+                source:
+                  type: string
+                  format: uri
+                is_public:
+                  type: boolean
       responses:
-        "200":
-          description: Asset updated
-        "401":
+        200:
+          description: Asset updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        400:
+          description: Bad request
+        401:
           description: Unauthorized
-        "403":
+        403:
           description: Forbidden - not owner
-        "404":
+        404:
           description: Asset not found
     delete:
-      summary: Delete asset
-      tags: [Assets]
+      summary: Delete assets_manager asset
+      description: Delete an asset. Requires authentication and ownership.
+      tags:
+        - Assets
       security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
       parameters:
         - name: id
           in: path
           required: true
           schema:
-            type: integer
+            type: string
+          description: Asset ID
       responses:
-        "200":
-          description: Asset deleted
-        "401":
+        200:
+          description: Asset deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        401:
           description: Unauthorized
-        "403":
+        403:
           description: Forbidden - not owner
-        "404":
+        404:
           description: Asset not found
-
-  /api/assets/{id}/download:
+  "/api/assets/{id}/download":
     get:
-      summary: Download asset (attachment)
-      tags: [Assets]
+      summary: Download assets_manager asset
+      description: Download the asset file with Content-Disposition header
+      tags:
+        - Assets
       parameters:
         - name: id
           in: path
           required: true
           schema:
-            type: integer
+            type: string
+          description: Asset ID
       responses:
-        "200":
+        200:
           description: Asset file download
           content:
             model/gltf-binary:
               schema:
                 type: string
                 format: binary
-        "404":
+        404:
           description: Asset not found
-
-  # ============================================================
-  # POINT CLOUDS MANAGER
-  # ============================================================
-  /api/pointclouds:
-    get:
-      summary: List all point clouds
-      tags: [Point Clouds]
-      responses:
-        "200":
-          description: List of point clouds
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AssetListResponse"
+  /api/assets/batch:
     post:
-      summary: Upload a new point cloud
-      tags: [Point Clouds]
+      summary: Batch upload assets_manager assets
+      description: Upload multiple assets in one request. Files must be base64 encoded.
+      tags:
+        - Assets
       security:
-        - ApiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/AssetUploadRequest"
-      responses:
-        "201":
-          description: Point cloud created successfully
-        "401":
-          description: Unauthorized
-
-  /api/pointclouds/{id}:
-    get:
-      summary: Get point cloud by ID
-      tags: [Point Clouds]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Point cloud content
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        "404":
-          description: Not found
-    put:
-      summary: Update point cloud metadata
-      tags: [Point Clouds]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AssetUpdateRequest"
-      responses:
-        "200":
-          description: Updated
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not found
-    delete:
-      summary: Delete point cloud
-      tags: [Point Clouds]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Deleted
-        "401":
-          description: Unauthorized
-        "404":
-          description: Not found
-
-  /api/pointclouds/{id}/download:
-    get:
-      summary: Download point cloud
-      tags: [Point Clouds]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Point cloud file download
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-
-  # ============================================================
-  # TILESETS MANAGER
-  # ============================================================
-  /api/tilesets:
-    get:
-      summary: List all tilesets
-      tags: [Tilesets]
-      responses:
-        "200":
-          description: List of tilesets
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AssetListResponse"
-    post:
-      summary: Upload a new tileset (ZIP containing tileset.json)
-      tags: [Tilesets]
-      security:
-        - ApiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/AssetUploadRequest"
-      responses:
-        "201":
-          description: Tileset created successfully
-        "401":
-          description: Unauthorized
-
-  /api/tilesets/{id}:
-    get:
-      summary: Get tileset by ID (returns tileset.json)
-      tags: [Tilesets]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Tileset JSON
-          content:
-            application/json:
-              schema:
-                type: object
-        "404":
-          description: Not found
-    put:
-      summary: Update tileset metadata
-      tags: [Tilesets]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AssetUpdateRequest"
-      responses:
-        "200":
-          description: Updated
-        "401":
-          description: Unauthorized
-        "404":
-          description: Not found
-    delete:
-      summary: Delete tileset
-      tags: [Tilesets]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Deleted
-        "401":
-          description: Unauthorized
-        "404":
-          description: Not found
-
-  /api/tilesets/{id}/tileset.json:
-    get:
-      summary: Get tileset.json file
-      tags: [Tilesets]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Tileset JSON file
-          content:
-            application/json:
-              schema:
-                type: object
-
-  /api/tilesets/{id}/{path}:
-    get:
-      summary: Get tileset tile file (GLB, B3DM, etc.)
-      tags: [Tilesets]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: path
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Path to the tile file within the tileset
-      responses:
-        "200":
-          description: Tile file
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-
-  # ============================================================
-  # DIGITAL TERRAIN MANAGER
-  # ============================================================
-  /api/digital_terrain:
-    get:
-      summary: List all digital terrain models
-      tags: [Digital Terrain]
-      responses:
-        "200":
-          description: List of digital terrain models
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AssetListResponse"
-    post:
-      summary: Upload a new digital terrain model
-      tags: [Digital Terrain]
-      security:
-        - ApiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/AssetUploadRequest"
-      responses:
-        "201":
-          description: Digital terrain created successfully
-        "401":
-          description: Unauthorized
-
-  /api/digital_terrain/{id}:
-    get:
-      summary: Get digital terrain by ID
-      tags: [Digital Terrain]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Digital terrain JSON
-          content:
-            application/json:
-              schema:
-                type: object
-        "404":
-          description: Not found
-    put:
-      summary: Update digital terrain metadata
-      tags: [Digital Terrain]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AssetUpdateRequest"
-      responses:
-        "200":
-          description: Updated
-        "401":
-          description: Unauthorized
-        "404":
-          description: Not found
-    delete:
-      summary: Delete digital terrain
-      tags: [Digital Terrain]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Deleted
-        "401":
-          description: Unauthorized
-        "404":
-          description: Not found
-
-  /api/digital_terrain/{id}/tileset.json:
-    get:
-      summary: Get digital terrain tileset.json file
-      tags: [Digital Terrain]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Tileset JSON file
-          content:
-            application/json:
-              schema:
-                type: object
-
-  # ============================================================
-  # WMS LAYERS MANAGER
-  # ============================================================
-  /wms_layers:
-    get:
-      summary: List all WMS layers
-      tags: [WMS Layers]
-      responses:
-        "200":
-          description: List of all WMS layers
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WMSLayerListResponse"
-    post:
-      summary: Create a new WMS layer
-      tags: [WMS Layers]
-      security:
-        - ApiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/WMSLayerCreateRequest"
-      responses:
-        "201":
-          description: Layer created
-        "401":
-          description: Unauthorized
-
-  /wms_layers/{id}:
-    get:
-      summary: Get WMS layer by ID
-      tags: [WMS Layers]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: WMS layer details
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WMSLayer"
-        "404":
-          description: Not found
-    put:
-      summary: Update WMS layer
-      tags: [WMS Layers]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/WMSLayerUpdateRequest"
-      responses:
-        "200":
-          description: Updated
-        "401":
-          description: Unauthorized
-        "404":
-          description: Not found
-    delete:
-      summary: Delete WMS layer
-      tags: [WMS Layers]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Deleted
-        "401":
-          description: Unauthorized
-        "404":
-          description: Not found
-
-  /wms_layers/servers/grouped:
-    get:
-      summary: Get all layers grouped by WMS server
-      tags: [WMS Layers]
-      responses:
-        "200":
-          description: Layers grouped by server URL
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WMSLayersGroupedResponse"
-
-  /wms_layers/servers/{wmsUrl}/layers:
-    get:
-      summary: Get all layers for a specific WMS server
-      tags: [WMS Layers]
-      parameters:
-        - name: wmsUrl
-          in: path
-          required: true
-          schema:
-            type: string
-          description: URL-encoded WMS server URL
-      responses:
-        "200":
-          description: Layers for the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WMSServerLayersResponse"
-    post:
-      summary: Add layers to a specific WMS server
-      tags: [WMS Layers]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: wmsUrl
-          in: path
-          required: true
-          schema:
-            type: string
+        - apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -1223,34 +193,255 @@ paths:
             schema:
               type: object
               required:
-                - layers
+                - requests
               properties:
-                layers:
+                requests:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - file
+                      - description
+                      - source
+                      - filename
+                    properties:
+                      file:
+                        type: string
+                        format: byte
+                        description: Base64 encoded file
+                      filename:
+                        type: string
+                      description:
+                        type: string
+                      source:
+                        type: string
+                        format: uri
+                      is_public:
+                        type: boolean
+      responses:
+        200:
+          description: All assets uploaded successfully
+        207:
+          description: Partial success - some uploads failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+    delete:
+      summary: Batch delete assets_manager assets
+      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      tags:
+        - Assets
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
                   type: array
                   items:
                     type: string
-                  description: List of layer names to add
+                  description: Array of asset IDs to delete
+      responses:
+        200:
+          description: All assets deleted successfully
+        207:
+          description: Partial success - some deletions failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+  /api/bolt/geofence:
+    get:
+      summary: Get bolt_geofence_collector data
+      description: Collecte les zones de géorepérage Bolt à Bruxelles
+      tags:
+        - Bolt
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/bolt/vehicle-position:
+    get:
+      summary: Get bolt_vehicle_position_collector data
+      description: Collecte les positions des véhicules Bolt à Bruxelles
+      tags:
+        - Bolt
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/bolt/vehicle-type:
+    get:
+      summary: Get bolt_vehicle_type_collector data
+      description: Collecte les types de véhicules Bolt à Bruxelles
+      tags:
+        - Bolt
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/brussels-mobility/bike-counters:
+    get:
+      summary: Get brussels_mobility_bike_counters_collector data
+      description: Collecte les métadonnées des compteurs vélo de Brussels Mobility
+      tags:
+        - Brussels
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/brussels-mobility/bike-counts:
+    get:
+      summary: Get brussels_mobility_bike_counts_collector data
+      description: Collecte les comptages vélo en temps réel de Brussels Mobility
+      tags:
+        - Brussels
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/brussels-mobility/traffic-counts:
+    get:
+      summary: Get brussels_mobility_traffic_counts_collector data
+      description: Collecte les comptages trafic en temps réel de Brussels Mobility
+      tags:
+        - Brussels
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/brussels-mobility/traffic-devices:
+    get:
+      summary: Get brussels_mobility_traffic_devices_collector data
+      description: Collecte les métadonnées des compteurs trafic de Brussels Mobility
+      tags:
+        - Brussels
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/delijn/gtfs-realtime:
+    get:
+      summary: Get delijn_gtfs_realtime_collector data
+      description: Collecte les données GTFS temps réel de De Lijn
+      tags:
+        - DeLijn
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/x-protobuf:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/delijn/gtfs-static:
+    get:
+      summary: Get delijn_gtfs_static_collector data
+      description: Collecte les données GTFS statiques de De Lijn
+      tags:
+        - DeLijn
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/zip:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/digital_terrain:
+    get:
+      summary: List all digital_terrain_manager assets
+      description: Manage digital terrain
+      tags:
+        - DigitalTerrain
+      responses:
+        200:
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TilesetResponse"
+    post:
+      summary: Upload a new digital_terrain_manager asset
+      description: Upload a new asset file with metadata. Requires authentication.
+      tags:
+        - DigitalTerrain
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - description
+                - source
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
                 description:
                   type: string
+                  description: Asset description
+                source:
+                  type: string
+                  format: uri
+                  description: Source URL for provenance
+                is_public:
+                  type: boolean
+                  description: "Whether asset is public (default: true)"
       responses:
-        "201":
-          description: Layers added
-        "401":
-          description: Unauthorized
-    delete:
-      summary: Delete all layers for a specific WMS server
-      tags: [WMS Layers]
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: wmsUrl
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Layers deleted
+        200:
+          description: Tileset uploaded successfully
           content:
             application/json:
               schema:
@@ -1258,873 +449,1471 @@ paths:
                 properties:
                   message:
                     type: string
-                  deleted_count:
+                  tileset_name:
+                    type: string
+                    description: Extracted tileset name
+                  file_count:
                     type: integer
-        "401":
-          description: Unauthorized
-
-  /wms_layers/layers/{id}/toggle:
+                    description: Number of files in the tileset
+        400:
+          description: Bad request - missing or invalid fields
+        401:
+          description: Unauthorized - authentication required
+  "/api/digital_terrain/{id}":
+    get:
+      summary: Get digital_terrain_manager asset by ID
+      description: Returns the asset file content
+      tags:
+        - DigitalTerrain
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset file content
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Asset not found
     put:
-      summary: Toggle layer active status
-      tags: [WMS Layers]
+      summary: Update digital_terrain_manager asset metadata
+      description: Update asset description, source, or visibility. Requires authentication and ownership.
+      tags:
+        - DigitalTerrain
       security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                source:
+                  type: string
+                  format: uri
+                is_public:
+                  type: boolean
+      responses:
+        200:
+          description: Asset updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Asset not found
+    delete:
+      summary: Delete digital_terrain_manager asset
+      description: Delete an asset. Requires authentication and ownership.
+      tags:
+        - DigitalTerrain
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Asset not found
+  "/api/digital_terrain/{id}/download":
+    get:
+      summary: Download digital_terrain_manager asset
+      description: Download the asset file with Content-Disposition header
+      tags:
+        - DigitalTerrain
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset file download
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Asset not found
+  /api/digital_terrain/batch:
+    post:
+      summary: Batch upload digital_terrain_manager assets
+      description: Upload multiple assets in one request. Files must be base64 encoded.
+      tags:
+        - DigitalTerrain
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requests
+              properties:
+                requests:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - file
+                      - description
+                      - source
+                      - filename
+                    properties:
+                      file:
+                        type: string
+                        format: byte
+                        description: Base64 encoded file
+                      filename:
+                        type: string
+                      description:
+                        type: string
+                      source:
+                        type: string
+                        format: uri
+                      is_public:
+                        type: boolean
+      responses:
+        200:
+          description: All assets uploaded successfully
+        207:
+          description: Partial success - some uploads failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+    delete:
+      summary: Batch delete digital_terrain_manager assets
+      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      tags:
+        - DigitalTerrain
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of asset IDs to delete
+      responses:
+        200:
+          description: All assets deleted successfully
+        207:
+          description: Partial success - some deletions failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+  /api/dott/geofence:
+    get:
+      summary: Get dott_geofence_collector data
+      description: Collecte les zones de géorepérage Dott à Bruxelles
+      tags:
+        - Dott
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/dott/vehicle-position:
+    get:
+      summary: Get dott_vehicle_position_collector data
+      description: Collecte les positions des véhicules Dott à Bruxelles
+      tags:
+        - Dott
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/dott/vehicle-type:
+    get:
+      summary: Get dott_vehicle_type_collector data
+      description: Collecte les types de véhicules Dott à Bruxelles
+      tags:
+        - Dott
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/energy:
+    get:
+      summary: Get energy data
+      description: Data collector for energy
+      tags:
+        - energy
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/fixmystreet/history:
+    get:
+      summary: Get fixmystreet_history_harvester harvested data
+      description: Compares FixMyStreet versions to detect updates
+      tags:
+        - FixMyStreet
+      responses:
+        200:
+          description: Latest harvested data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/fixmystreet/incidents:
+    get:
+      summary: Get fixmystreet_collector data
+      description: Collects incident data from FixMyStreet Brussels
+      tags:
+        - FixMyStreet
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/infrabel/line-sections:
+    get:
+      summary: Get infrabel_line_section_collector data
+      description: Collecte les sections de lignes du réseau Infrabel (GeoJSON)
+      tags:
+        - Infrabel
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/infrabel/operational-points:
+    get:
+      summary: Get infrabel_operational_points_collector data
+      description: Collecte les points opérationnels du réseau Infrabel (GeoJSON)
+      tags:
+        - Infrabel
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/infrabel/punctuality:
+    get:
+      summary: Get infrabel_punctuality_collector data
+      description: Collecte les données de ponctualité D-1 du réseau Infrabel (JSON)
+      tags:
+        - Infrabel
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/infrabel/segments:
+    get:
+      summary: Get infrabel_segments_collector data
+      description: Collecte les segments station à station du réseau Infrabel (GeoJSON)
+      tags:
+        - Infrabel
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/irceline_sos:
+    get:
+      summary: Get irceline_sos data
+      description: Data collector for IRCELINE air quality data
+      tags:
+        - irceline_sos
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/lime/vehicle-position:
+    get:
+      summary: Get lime_vehicle_position_collector data
+      description: Collecte les positions des véhicules Lime à Bruxelles
+      tags:
+        - Lime
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/lime/vehicle-type:
+    get:
+      summary: Get lime_vehicle_type_collector data
+      description: Collecte les types de véhicules Lime à Bruxelles
+      tags:
+        - Lime
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/opensky:
+    get:
+      summary: Get opensky_collector data
+      description: Collects data from OpenSky APIs
+      tags:
+        - OpenSky+
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/pointclouds:
+    get:
+      summary: List all pointcloud_manager assets
+      description: Manage point clouds
+      tags:
+        - PointCloud
+      responses:
+        200:
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AssetResponse"
+    post:
+      summary: Upload a new pointcloud_manager asset
+      description: Upload a new asset file with metadata. Requires authentication.
+      tags:
+        - PointCloud
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - description
+                - source
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+                description:
+                  type: string
+                  description: Asset description
+                source:
+                  type: string
+                  format: uri
+                  description: Source URL for provenance
+                is_public:
+                  type: boolean
+                  description: "Whether asset is public (default: true)"
+      responses:
+        200:
+          description: Asset uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        400:
+          description: Bad request - missing or invalid fields
+        401:
+          description: Unauthorized - authentication required
+  "/api/pointclouds/{id}":
+    get:
+      summary: Get pointcloud_manager asset by ID
+      description: Returns the asset file content
+      tags:
+        - PointCloud
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset file content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Asset not found
+    put:
+      summary: Update pointcloud_manager asset metadata
+      description: Update asset description, source, or visibility. Requires authentication and ownership.
+      tags:
+        - PointCloud
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                source:
+                  type: string
+                  format: uri
+                is_public:
+                  type: boolean
+      responses:
+        200:
+          description: Asset updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Asset not found
+    delete:
+      summary: Delete pointcloud_manager asset
+      description: Delete an asset. Requires authentication and ownership.
+      tags:
+        - PointCloud
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Asset not found
+  "/api/pointclouds/{id}/download":
+    get:
+      summary: Download pointcloud_manager asset
+      description: Download the asset file with Content-Disposition header
+      tags:
+        - PointCloud
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset file download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Asset not found
+  /api/pointclouds/batch:
+    post:
+      summary: Batch upload pointcloud_manager assets
+      description: Upload multiple assets in one request. Files must be base64 encoded.
+      tags:
+        - PointCloud
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requests
+              properties:
+                requests:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - file
+                      - description
+                      - source
+                      - filename
+                    properties:
+                      file:
+                        type: string
+                        format: byte
+                        description: Base64 encoded file
+                      filename:
+                        type: string
+                      description:
+                        type: string
+                      source:
+                        type: string
+                        format: uri
+                      is_public:
+                        type: boolean
+      responses:
+        200:
+          description: All assets uploaded successfully
+        207:
+          description: Partial success - some uploads failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+    delete:
+      summary: Batch delete pointcloud_manager assets
+      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      tags:
+        - PointCloud
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of asset IDs to delete
+      responses:
+        200:
+          description: All assets deleted successfully
+        207:
+          description: Partial success - some deletions failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+  /api/pony/geofence:
+    get:
+      summary: Get pony_geofence_collector data
+      description: Collecte les zones de géorepérage Pony à Bruxelles
+      tags:
+        - Pony
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/pony/vehicle-position:
+    get:
+      summary: Get pony_vehicle_position_collector data
+      description: Collecte les positions des véhicules Pony à Bruxelles
+      tags:
+        - Pony
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/pony/vehicle-type:
+    get:
+      summary: Get pony_vehicle_type_collector data
+      description: Collecte les types de véhicules Pony à Bruxelles
+      tags:
+        - Pony
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/sncb/gtfs-realtime:
+    get:
+      summary: Get sncb_gtfs_realtime_collector data
+      description: Collecte les données GTFS temps réel de la SNCB
+      tags:
+        - SNCB
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/x-protobuf:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/sncb/gtfs-static:
+    get:
+      summary: Get sncb_gtfs_static_collector data
+      description: Collecte les données GTFS statiques de la SNCB
+      tags:
+        - SNCB
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/zip:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/stib/gtfs:
+    get:
+      summary: Get stib_gtfs_collector data
+      description: Collecte les données GTFS statiques de la STIB pour Bruxelles
+      tags:
+        - STIB
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/zip:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/stib/shapefiles:
+    get:
+      summary: Get stib_shapefiles_collector data
+      description: Collecte les shapefiles du réseau STIB en format GeoJSON
+      tags:
+        - STIB
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/stib/stops:
+    get:
+      summary: Get stib_stops_collector data
+      description: Collecte les arrêts STIB avec coordonnées géographiques
+      tags:
+        - STIB
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/geo+json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/stib/vehicle-positions:
+    get:
+      summary: Get stib_vehicle_positions_collector data
+      description: Collecte les positions des véhicules STIB en temps réel
+      tags:
+        - STIB
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/sensor-community:
+    get:
+      summary: Get sensor_community_collector data
+      description: Collects data from Sensor Community APIs
+      tags:
+        - Sensor Community
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/sibelga:
+    get:
+      summary: Get sibelga_collector data
+      description: Collects data from Sibelga APIs
+      tags:
+        - Sibelga
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/tec/gtfs-realtime:
+    get:
+      summary: Get tec_gtfs_realtime_collector data
+      description: Collecte les données GTFS temps réel de TEC
+      tags:
+        - TEC
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/x-protobuf:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/tec/gtfs-static:
+    get:
+      summary: Get tec_gtfs_static_collector data
+      description: Collecte les données GTFS statiques de TEC
+      tags:
+        - TEC
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/zip:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/telraam/traffic:
+    get:
+      summary: Get telraam_traffic_collector data
+      description: "Collecte les données de trafic en temps réel depuis l'API Telraam"
+      tags:
+        - Telraam
+      responses:
+        200:
+          description: Latest collected data
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          description: No data available
+  /api/tilesets:
+    get:
+      summary: List all tilesets_manager assets
+      description: Manage tilesets
+      tags:
+        - Tileset
+      responses:
+        200:
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TilesetResponse"
+    post:
+      summary: Upload a new tilesets_manager asset
+      description: Upload a new asset file with metadata. Requires authentication.
+      tags:
+        - Tileset
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - description
+                - source
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+                description:
+                  type: string
+                  description: Asset description
+                source:
+                  type: string
+                  format: uri
+                  description: Source URL for provenance
+                is_public:
+                  type: boolean
+                  description: "Whether asset is public (default: true)"
+      responses:
+        200:
+          description: Tileset uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  tileset_name:
+                    type: string
+                    description: Extracted tileset name
+                  file_count:
+                    type: integer
+                    description: Number of files in the tileset
+        400:
+          description: Bad request - missing or invalid fields
+        401:
+          description: Unauthorized - authentication required
+  "/api/tilesets/{id}":
+    get:
+      summary: Get tilesets_manager asset by ID
+      description: Returns the asset file content
+      tags:
+        - Tileset
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset file content
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Asset not found
+    put:
+      summary: Update tilesets_manager asset metadata
+      description: Update asset description, source, or visibility. Requires authentication and ownership.
+      tags:
+        - Tileset
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                source:
+                  type: string
+                  format: uri
+                is_public:
+                  type: boolean
+      responses:
+        200:
+          description: Asset updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Asset not found
+    delete:
+      summary: Delete tilesets_manager asset
+      description: Delete an asset. Requires authentication and ownership.
+      tags:
+        - Tileset
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Asset not found
+  "/api/tilesets/{id}/download":
+    get:
+      summary: Download tilesets_manager asset
+      description: Download the asset file with Content-Disposition header
+      tags:
+        - Tileset
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Asset ID
+      responses:
+        200:
+          description: Asset file download
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Asset not found
+  /api/tilesets/batch:
+    post:
+      summary: Batch upload tilesets_manager assets
+      description: Upload multiple assets in one request. Files must be base64 encoded.
+      tags:
+        - Tileset
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requests
+              properties:
+                requests:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - file
+                      - description
+                      - source
+                      - filename
+                    properties:
+                      file:
+                        type: string
+                        format: byte
+                        description: Base64 encoded file
+                      filename:
+                        type: string
+                      description:
+                        type: string
+                      source:
+                        type: string
+                        format: uri
+                      is_public:
+                        type: boolean
+      responses:
+        200:
+          description: All assets uploaded successfully
+        207:
+          description: Partial success - some uploads failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+    delete:
+      summary: Batch delete tilesets_manager assets
+      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      tags:
+        - Tileset
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of asset IDs to delete
+      responses:
+        200:
+          description: All assets deleted successfully
+        207:
+          description: Partial success - some deletions failed
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+  /wms_layers:
+    get:
+      summary: List all wms_layers records
+      description: Manage WMS layers for mapping applications
+      tags:
+        - wms_layers
+      responses:
+        200:
+          description: List of records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/wms_layersRecord"
+    post:
+      summary: Create a new wms_layers record
+      description: Create a new record. Requires authentication.
+      tags:
+        - wms_layers
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/wms_layersInput"
+      responses:
+        201:
+          description: Record created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+  "/wms_layers/{id}":
+    get:
+      summary: Get wms_layers record by ID
+      description: Returns a single record
+      tags:
+        - wms_layers
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
+          description: Record ID
       responses:
-        "200":
-          description: Layer status toggled
+        200:
+          description: Record details
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  layer_id:
-                    type: string
-                  active:
-                    type: boolean
-        "401":
-          description: Unauthorized
-        "404":
-          description: Layer not found
-
-  /wms_layers/bulk:
-    post:
-      summary: Add multiple layers at once (multi-server)
-      tags: [WMS Layers]
+                $ref: "#/components/schemas/wms_layersRecord"
+        404:
+          description: Record not found
+    put:
+      summary: Update wms_layers record
+      description: Update a record. Requires authentication and ownership.
+      tags:
+        - wms_layers
       security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Record ID
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/WMSLayerBulkInput"
+              $ref: "#/components/schemas/wms_layersInput"
       responses:
-        "201":
-          description: Layers added
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  layers:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        wms_url:
-                          type: string
-                        layer_name:
-                          type: string
-        "401":
+        200:
+          description: Record updated successfully
+        400:
+          description: Bad request
+        401:
           description: Unauthorized
-
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Record not found
+    delete:
+      summary: Delete wms_layers record
+      description: Delete a record. Requires authentication and ownership.
+      tags:
+        - wms_layers
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Record ID
+      responses:
+        200:
+          description: Record deleted successfully
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden - not owner
+        404:
+          description: Record not found
+  /wms_layers/servers/grouped:
+    get:
+      summary: "Custom endpoint: /servers/grouped"
+      tags:
+        - wms_layers
+      responses:
+        200:
+          description: Successful response
+  "/wms_layers/servers/:wmsUrl/layers":
+    get:
+      summary: "Custom endpoint: /servers/:wmsUrl/layers"
+      tags:
+        - wms_layers
+      responses:
+        200:
+          description: Successful response
+    delete:
+      summary: "Custom endpoint: /servers/:wmsUrl/layers"
+      tags:
+        - wms_layers
+      responses:
+        200:
+          description: Successful response
+    post:
+      summary: "Custom endpoint: /servers/:wmsUrl/layers"
+      tags:
+        - wms_layers
+      responses:
+        200:
+          description: Successful response
+  "/wms_layers/layers/:id/toggle":
+    put:
+      summary: "Custom endpoint: /layers/:id/toggle"
+      tags:
+        - wms_layers
+      responses:
+        200:
+          description: Successful response
+  /wms_layers/bulk:
+    post:
+      summary: "Custom endpoint: /bulk"
+      tags:
+        - wms_layers
+      responses:
+        200:
+          description: Successful response
+servers:
+  - url: "https://newdata.digitaltwin.brussels"
+tags:
+  - name: Assets
+    description: Manage assets
+  - name: Bolt
+    description: Collecte les zones de géorepérage Bolt à Bruxelles
+  - name: Brussels
+    description: Collecte les métadonnées des compteurs vélo de Brussels Mobility
+  - name: DeLijn
+    description: Collecte les données GTFS temps réel de De Lijn
+  - name: DigitalTerrain
+    description: Manage digital terrain
+  - name: Dott
+    description: Collecte les zones de géorepérage Dott à Bruxelles
+  - name: energy
+    description: Data collector for energy
+  - name: FixMyStreet
+    description: Compares FixMyStreet versions to detect updates
+  - name: Infrabel
+    description: Collecte les sections de lignes du réseau Infrabel (GeoJSON)
+  - name: irceline_sos
+    description: Data collector for IRCELINE air quality data
+  - name: Lime
+    description: Collecte les positions des véhicules Lime à Bruxelles
+  - name: OpenSky+
+    description: Collects data from OpenSky APIs
+  - name: PointCloud
+    description: Manage point clouds
+  - name: Pony
+    description: Collecte les zones de géorepérage Pony à Bruxelles
+  - name: Sensor Community
+    description: Collects data from Sensor Community APIs
+  - name: Sibelga
+    description: Collects data from Sibelga APIs
+  - name: SNCB
+    description: Collecte les données GTFS temps réel de la SNCB
+  - name: STIB
+    description: Collecte les données GTFS statiques de la STIB pour Bruxelles
+  - name: TEC
+    description: Collecte les données GTFS temps réel de TEC
+  - name: Telraam
+    description: "Collecte les données de trafic en temps réel depuis l'API Telraam"
+  - name: Tileset
+    description: Manage tilesets
+  - name: wms_layers
+    description: Manage WMS layers for mapping applications
 components:
+  schemas:
+    AssetResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        date:
+          type: string
+          format: date-time
+        contentType:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+        owner_id:
+          type: integer
+          nullable: true
+        filename:
+          type: string
+        is_public:
+          type: boolean
+        url:
+          type: string
+        download_url:
+          type: string
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    TilesetResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        date:
+          type: string
+          format: date-time
+        contentType:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+        owner_id:
+          type: integer
+          nullable: true
+        filename:
+          type: string
+        tileset_name:
+          type: string
+          description: Extracted tileset name from ZIP
+        file_count:
+          type: integer
+          description: Number of files in the tileset
+        has_metadata:
+          type: boolean
+          description: Whether tileset has metadata file
+        main_files:
+          type: array
+          items:
+            type: string
+          description: Main tileset files (e.g., tileset.json)
+        url:
+          type: string
+        download_url:
+          type: string
+    wms_layersRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        owner_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        wms_url:
+          type: string
+        layer_name:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
+    wms_layersInput:
+      type: object
+      properties:
+        wms_url:
+          type: string
+        layer_name:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
       in: header
       name: x-user-id
       description: Keycloak user ID (forwarded by APISIX)
-
-  schemas:
-    # ============================================================
-    # GeoJSON Base Schemas
-    # ============================================================
-    Point:
-      type: object
-      required: [type, coordinates]
-      properties:
-        type:
-          type: string
-          enum: [Point]
-        coordinates:
-          type: array
-          minItems: 2
-          maxItems: 3
-          items:
-            type: number
-
-    MultiPolygon:
-      type: object
-      required: [type, coordinates]
-      properties:
-        type:
-          type: string
-          enum: [MultiPolygon]
-        coordinates:
-          type: array
-          items:
-            type: array
-            items:
-              type: array
-              minItems: 4
-              items:
-                type: array
-                minItems: 2
-                maxItems: 3
-                items:
-                  type: number
-
-    Feature:
-      type: object
-      required: [type, geometry, properties]
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-        geometry:
-          type: object
-        properties:
-          type: object
-
-    FeatureCollection:
-      type: object
-      required: [type, features]
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-        features:
-          type: array
-          items:
-            $ref: "#/components/schemas/Feature"
-
-    # ============================================================
-    # Bolt Schemas
-    # ============================================================
-    BoltGeofenceRule:
-      type: object
-      properties:
-        ride_allowed:
-          type: boolean
-        ride_through_allowed:
-          type: boolean
-        maximum_speed_kph:
-          type: number
-        vehicle_type_id:
-          type: array
-          items:
-            type: string
-
-    BoltGeofenceFeatureProperties:
-      type: object
-      properties:
-        name:
-          type: string
-        rules:
-          type: array
-          items:
-            $ref: "#/components/schemas/BoltGeofenceRule"
-
-    BoltGeofenceFeature:
-      allOf:
-        - $ref: "#/components/schemas/Feature"
-        - type: object
-          properties:
-            geometry:
-              $ref: "#/components/schemas/MultiPolygon"
-            properties:
-              $ref: "#/components/schemas/BoltGeofenceFeatureProperties"
-
-    BoltGeofenceFeatureCollection:
-      allOf:
-        - $ref: "#/components/schemas/FeatureCollection"
-        - type: object
-          properties:
-            features:
-              type: array
-              items:
-                $ref: "#/components/schemas/BoltGeofenceFeature"
-
-    BoltGeofenceCollectorResponse:
-      type: object
-      properties:
-        last_updated:
-          type: integer
-        ttl:
-          type: integer
-        version:
-          type: string
-        data:
-          type: object
-          properties:
-            geofencing_zones:
-              $ref: "#/components/schemas/BoltGeofenceFeatureCollection"
-
-    BoltVehiclePositionFeatureProperties:
-      type: object
-      properties:
-        current_range_meters:
-          type: integer
-        current_fuel_percent:
-          type: number
-        pricing_plan_id:
-          type: string
-        vehicle_type_id:
-          type: string
-        is_reserved:
-          type: boolean
-        is_disabled:
-          type: boolean
-        bike_id:
-          type: string
-        rental_uris:
-          type: object
-          properties:
-            android:
-              type: string
-            ios:
-              type: string
-
-    BoltVehiclePositionFeature:
-      allOf:
-        - $ref: "#/components/schemas/Feature"
-        - type: object
-          properties:
-            geometry:
-              $ref: "#/components/schemas/Point"
-            properties:
-              $ref: "#/components/schemas/BoltVehiclePositionFeatureProperties"
-
-    BoltVehiclePositionFeatureCollection:
-      allOf:
-        - $ref: "#/components/schemas/FeatureCollection"
-        - type: object
-          properties:
-            features:
-              type: array
-              items:
-                $ref: "#/components/schemas/BoltVehiclePositionFeature"
-
-    BoltVehicleType:
-      type: object
-      properties:
-        vehicle_type_id:
-          type: string
-        propulsion_type:
-          type: string
-          enum: [electric, electric_assist, human]
-        form_factor:
-          type: string
-          enum: [scooter, bicycle]
-        max_range_meters:
-          type: integer
-          nullable: true
-        name:
-          type: string
-        return_constraint:
-          type: string
-        default_reserve_time:
-          type: integer
-
-    BoltVehicleTypeCollectorResponse:
-      type: object
-      properties:
-        last_updated:
-          type: integer
-        ttl:
-          type: integer
-        version:
-          type: string
-        data:
-          type: object
-          properties:
-            vehicle_types:
-              type: array
-              items:
-                $ref: "#/components/schemas/BoltVehicleType"
-
-    # ============================================================
-    # Brussels Mobility Schemas
-    # ============================================================
-    BrusselsMobilityBikeCountersFeatureProperties:
-      type: object
-      properties:
-        device_name:
-          type: string
-        active:
-          type: boolean
-        road_nl:
-          type: string
-        road_fr:
-          type: string
-        road_en:
-          type: string
-
-    BrusselsMobilityBikeCountersFeature:
-      allOf:
-        - $ref: "#/components/schemas/Feature"
-        - type: object
-          properties:
-            geometry:
-              $ref: "#/components/schemas/Point"
-            properties:
-              $ref: "#/components/schemas/BrusselsMobilityBikeCountersFeatureProperties"
-
-    BrusselsMobilityBikeCountersFeatureCollection:
-      allOf:
-        - $ref: "#/components/schemas/FeatureCollection"
-        - type: object
-          properties:
-            requestDate:
-              type: string
-              format: date-time
-            totalFeatures:
-              type: integer
-
-    BrusselsMobilityBikeCountsResponse:
-      type: object
-      properties:
-        requestDate:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              hour_cnt:
-                type: integer
-              day_cnt:
-                type: integer
-              year_cnt:
-                type: integer
-              cnt_time:
-                type: string
-
-    BrusselsMobilityTrafficDevicesFeatureProperties:
-      type: object
-      properties:
-        traverse_name:
-          type: string
-        descr_nl:
-          type: string
-        descr_fr:
-          type: string
-        descr_en:
-          type: string
-        number_of_lanes:
-          type: integer
-        detectors:
-          type: array
-          items:
-            type: string
-
-    BrusselsMobilityTrafficDevicesFeature:
-      allOf:
-        - $ref: "#/components/schemas/Feature"
-        - type: object
-          properties:
-            geometry:
-              $ref: "#/components/schemas/Point"
-            properties:
-              $ref: "#/components/schemas/BrusselsMobilityTrafficDevicesFeatureProperties"
-
-    BrusselsMobilityTrafficDevicesFeatureCollection:
-      allOf:
-        - $ref: "#/components/schemas/FeatureCollection"
-        - type: object
-          properties:
-            requestDate:
-              type: string
-            totalFeatures:
-              type: integer
-
-    BrusselsMobilityTrafficCountsResponse:
-      type: object
-      description: Real-time traffic count data from Brussels Mobility
-      properties:
-        requestDate:
-          type: string
-          format: date-time
-        data:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              count:
-                type: integer
-              speed:
-                type: number
-              timestamp:
-                type: string
-
-    # ============================================================
-    # Energy Schemas
-    # ============================================================
-    EnergyConsumptionFeature:
-      allOf:
-        - $ref: "#/components/schemas/Feature"
-        - type: object
-          properties:
-            externalID:
-              type: integer
-            name:
-              type: string
-            history:
-              type: array
-              items:
-                type: object
-                properties:
-                  time:
-                    type: string
-                    format: date-time
-                  value:
-                    type: number
-                  symbol:
-                    type: string
-            lastUpdated:
-              type: string
-              format: date-time
-
-    EnergyConsumptionFeatureCollection:
-      allOf:
-        - $ref: "#/components/schemas/FeatureCollection"
-        - type: object
-          properties:
-            features:
-              type: array
-              items:
-                $ref: "#/components/schemas/EnergyConsumptionFeature"
-
-    # ============================================================
-    # FixMyStreet Schemas
-    # ============================================================
-    FixMyStreetFeature:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-        geometry:
-          $ref: "#/components/schemas/Point"
-        properties:
-          type: object
-          properties:
-            id:
-              type: integer
-            creationDate:
-              type: string
-              format: date-time
-            updatedDate:
-              type: string
-              format: date-time
-            status:
-              type: string
-              enum: [CREATED, PROCESSING, CLOSED]
-            location:
-              type: object
-            category:
-              type: object
-            responsibleOrganisation:
-              type: object
-
-    FixMyStreetFeatureCollection:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-        features:
-          type: array
-          items:
-            $ref: "#/components/schemas/FixMyStreetFeature"
-
-    FixMyStreetHistoryFeature:
-      allOf:
-        - $ref: "#/components/schemas/FixMyStreetFeature"
-        - type: object
-          properties:
-            history:
-              type: object
-              nullable: true
-              properties:
-                issueId:
-                  type: integer
-                newStatus:
-                  type: string
-                newDate:
-                  type: string
-                oldStatus:
-                  type: string
-                oldDate:
-                  type: string
-
-    FixMyStreetHistoryFeatureCollection:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-        features:
-          type: array
-          items:
-            $ref: "#/components/schemas/FixMyStreetHistoryFeature"
-
-    # ============================================================
-    # OpenSky Schemas
-    # ============================================================
-    OpenSkyFeature:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-        geometry:
-          $ref: "#/components/schemas/Point"
-        properties:
-          type: object
-          properties:
-            icao24:
-              type: string
-            callsign:
-              type: string
-              nullable: true
-            origin_country:
-              type: string
-            on_ground:
-              type: boolean
-            velocity:
-              type: number
-            heading:
-              type: number
-
-    OpenSkyFeatureCollection:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-        features:
-          type: array
-          items:
-            $ref: "#/components/schemas/OpenSkyFeature"
-
-    # ============================================================
-    # Telraam Schemas
-    # ============================================================
-    TelraamFeature:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-        geometry:
-          $ref: "#/components/schemas/Point"
-        properties:
-          type: object
-          properties:
-            segment_id:
-              type: integer
-            road_type:
-              type: string
-            vehicles:
-              type: object
-              properties:
-                car:
-                  type: object
-                  properties:
-                    count:
-                      type: integer
-                    avg_speed:
-                      type: number
-                bike:
-                  type: object
-                  properties:
-                    count:
-                      type: integer
-                pedestrian:
-                  type: object
-                  properties:
-                    count:
-                      type: integer
-            timestamp:
-              type: string
-              format: date-time
-
-    TelraamFeatureCollection:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-        features:
-          type: array
-          items:
-            $ref: "#/components/schemas/TelraamFeature"
-
-    # ============================================================
-    # Air Quality Schemas
-    # ============================================================
-    AirQualityFeatureProperties:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-        uom:
-          type: string
-        lastValue.timestamp:
-          type: integer
-        lastValue.value:
-          type: number
-
-    AirQualityFeature:
-      allOf:
-        - $ref: "#/components/schemas/Feature"
-        - type: object
-          properties:
-            id:
-              type: string
-            geometry:
-              $ref: "#/components/schemas/Point"
-            properties:
-              $ref: "#/components/schemas/AirQualityFeatureProperties"
-
-    AirQualityFeatureCollection:
-      allOf:
-        - $ref: "#/components/schemas/FeatureCollection"
-        - type: object
-          properties:
-            features:
-              type: array
-              items:
-                $ref: "#/components/schemas/AirQualityFeature"
-
-    # ============================================================
-    # Sensor Community Schemas
-    # ============================================================
-    SensorCommunityFeature:
-      allOf:
-        - $ref: "#/components/schemas/Feature"
-        - type: object
-          properties:
-            id:
-              type: integer
-            geometry:
-              $ref: "#/components/schemas/Point"
-            properties:
-              type: object
-              properties:
-                sensordatavalues:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      value_type:
-                        type: string
-                      value:
-                        type: string
-                      id:
-                        type: integer
-                id:
-                  type: integer
-                timestamp:
-                  type: string
-
-    SensorCommunityFeatureCollection:
-      allOf:
-        - $ref: "#/components/schemas/FeatureCollection"
-        - type: object
-          properties:
-            features:
-              type: array
-              items:
-                $ref: "#/components/schemas/SensorCommunityFeature"
-
-    # ============================================================
-    # Assets Manager Schemas
-    # ============================================================
-    AssetMetadata:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        description:
-          type: string
-        source:
-          type: string
-        filename:
-          type: string
-        contentType:
-          type: string
-        is_public:
-          type: boolean
-        owner_id:
-          type: integer
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-
-    AssetListResponse:
-      type: object
-      properties:
-        count:
-          type: integer
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/AssetMetadata"
-
-    AssetResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        message:
-          type: string
-
-    AssetUploadRequest:
-      type: object
-      required: [file]
-      properties:
-        file:
-          type: string
-          format: binary
-        name:
-          type: string
-        description:
-          type: string
-        source:
-          type: string
-        is_public:
-          type: boolean
-          default: false
-
-    AssetUpdateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        source:
-          type: string
-        is_public:
-          type: boolean
-
-    # ============================================================
-    # WMS Layers Schemas
-    # ============================================================
-    WMSLayer:
-      type: object
-      properties:
-        id:
-          type: integer
-        wms_url:
-          type: string
-        layer_name:
-          type: string
-        description:
-          type: string
-        active:
-          type: boolean
-        owner_id:
-          type: integer
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-
-    WMSLayerListResponse:
-      type: object
-      properties:
-        count:
-          type: integer
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/WMSLayer"
-
-    WMSLayerCreateRequest:
-      type: object
-      required: [wms_url, layer_name]
-      properties:
-        wms_url:
-          type: string
-        layer_name:
-          type: string
-        description:
-          type: string
-        active:
-          type: boolean
-          default: true
-
-    WMSLayerUpdateRequest:
-      type: object
-      properties:
-        wms_url:
-          type: string
-        layer_name:
-          type: string
-        description:
-          type: string
-        active:
-          type: boolean
-
-    WMSLayerBulkInput:
-      type: object
-      required: [url, name]
-      properties:
-        url:
-          type: string
-          description: WMS server URL
-        name:
-          type: string
-          description: Layer name
-        description:
-          type: string
-        active:
-          type: boolean
-          default: true
-
-    WMSLayersGroupedResponse:
-      type: object
-      additionalProperties:
-        type: array
-        items:
-          type: object
-          properties:
-            id:
-              type: integer
-            layer_name:
-              type: string
-            description:
-              type: string
-            active:
-              type: boolean
-
-    WMSServerLayersResponse:
-      type: object
-      properties:
-        wms_url:
-          type: string
-        count:
-          type: integer
-        layers:
-          type: array
-          items:
-            $ref: "#/components/schemas/WMSLayer"
