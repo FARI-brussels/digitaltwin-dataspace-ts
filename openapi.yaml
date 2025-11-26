@@ -1,0 +1,2130 @@
+openapi: 3.0.3
+info:
+  title: Fari Digital Twin API
+  description: API for managing digital twin data collectors, harvesters, assets managers and custom table managers
+  version: 2.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+tags:
+  # Mobility
+  - name: Mobility - Bolt
+    description: Bolt vehicle and geofence data collection
+  - name: Mobility - Brussels
+    description: Brussels mobility data (bikes, traffic)
+  - name: Mobility - Dott
+    description: Dott vehicle and geofence data collection
+  - name: Mobility - Lime
+    description: Lime vehicle data collection
+  - name: Mobility - Pony
+    description: Pony vehicle and geofence data collection
+
+  # Transit
+  - name: Transit - De Lijn
+    description: De Lijn public transport data (Flanders)
+  - name: Transit - SNCB
+    description: Belgian national railway data
+  - name: Transit - STIB
+    description: Brussels public transport data
+  - name: Transit - TEC
+    description: Wallonia public transport data
+
+  # Rail Infrastructure
+  - name: Rail - Infrabel
+    description: Belgian rail infrastructure data
+
+  # Environment
+  - name: Air Quality
+    description: Environmental and air quality data
+  - name: Sensors
+    description: Community sensor data
+
+  # Other
+  - name: Energy
+    description: Energy consumption data
+  - name: Urban Issues
+    description: FixMyStreet issue reporting data
+  - name: Aviation
+    description: OpenSky aircraft tracking data
+  - name: Traffic
+    description: Telraam traffic counting data
+  - name: Utilities
+    description: Sibelga utility data
+
+  # Assets Management
+  - name: Assets
+    description: 3D assets management (glTF/GLB files)
+  - name: Point Clouds
+    description: Point cloud data management (LAZ, LAS, PLY)
+  - name: Tilesets
+    description: 3D Tiles tileset management
+  - name: Digital Terrain
+    description: Digital terrain model management
+
+  # Custom Tables
+  - name: WMS Layers
+    description: WMS layer configuration management
+
+paths:
+  # ============================================================
+  # BOLT COLLECTORS
+  # ============================================================
+  /api/bolt/geofence:
+    get:
+      summary: Get Bolt geofence zones and restrictions
+      tags: [Mobility - Bolt]
+      responses:
+        "200":
+          description: Geofencing zones with rules
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BoltGeofenceCollectorResponse"
+
+  /api/bolt/vehicle-position:
+    get:
+      summary: Get Bolt vehicle positions
+      tags: [Mobility - Bolt]
+      responses:
+        "200":
+          description: List of Bolt vehicle positions
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/BoltVehiclePositionFeatureCollection"
+
+  /api/bolt/vehicle-type:
+    get:
+      summary: Get Bolt vehicle types
+      tags: [Mobility - Bolt]
+      responses:
+        "200":
+          description: List of Bolt vehicle types
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BoltVehicleTypeCollectorResponse"
+
+  # ============================================================
+  # BRUSSELS MOBILITY COLLECTORS
+  # ============================================================
+  /api/brussels-mobility/bike-counters:
+    get:
+      summary: Get list of bike counters
+      tags: [Mobility - Brussels]
+      responses:
+        "200":
+          description: List of bike counters
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/BrusselsMobilityBikeCountersFeatureCollection"
+
+  /api/brussels-mobility/bike-counts:
+    get:
+      summary: Get bike counter measurement data
+      tags: [Mobility - Brussels]
+      responses:
+        "200":
+          description: Measurement data per bike counter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BrusselsMobilityBikeCountsResponse"
+
+  /api/brussels-mobility/traffic-devices:
+    get:
+      summary: Get list of traffic devices
+      tags: [Mobility - Brussels]
+      responses:
+        "200":
+          description: List of traffic devices
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/BrusselsMobilityTrafficDevicesFeatureCollection"
+
+  /api/brussels-mobility/traffic-counts:
+    get:
+      summary: Get real-time traffic counts
+      tags: [Mobility - Brussels]
+      responses:
+        "200":
+          description: Live traffic count data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BrusselsMobilityTrafficCountsResponse"
+
+  # ============================================================
+  # DE LIJN COLLECTORS
+  # ============================================================
+  /api/delijn/gtfs-static:
+    get:
+      summary: Get De Lijn GTFS static feed (ZIP)
+      tags: [Transit - De Lijn]
+      responses:
+        "200":
+          description: GTFS static ZIP file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  /api/delijn/gtfs-realtime:
+    get:
+      summary: Get De Lijn GTFS realtime feed (ZIP)
+      tags: [Transit - De Lijn]
+      responses:
+        "200":
+          description: GTFS realtime ZIP file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  # ============================================================
+  # DOTT COLLECTORS
+  # ============================================================
+  /api/dott/geofence:
+    get:
+      summary: Get Dott geofencing zones in Brussels
+      tags: [Mobility - Dott]
+      responses:
+        "200":
+          description: Geofencing zones
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+
+  /api/dott/vehicle-position:
+    get:
+      summary: Get Dott vehicle positions in Brussels
+      tags: [Mobility - Dott]
+      responses:
+        "200":
+          description: Vehicle positions
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+
+  /api/dott/vehicle-type:
+    get:
+      summary: Get Dott vehicle types
+      tags: [Mobility - Dott]
+      responses:
+        "200":
+          description: Vehicle types
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # ENERGY COLLECTOR
+  # ============================================================
+  /api/energy:
+    get:
+      summary: Get energy consumption data
+      tags: [Energy]
+      responses:
+        "200":
+          description: Energy consumption data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnergyConsumptionFeatureCollection"
+
+  # ============================================================
+  # FIXMYSTREET COLLECTORS & HARVESTERS
+  # ============================================================
+  /api/fixmystreet/incidents:
+    get:
+      summary: Get FixMyStreet GeoJSON reports
+      tags: [Urban Issues]
+      responses:
+        "200":
+          description: GeoJSON FeatureCollection of urban issues
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FixMyStreetFeatureCollection"
+
+  /api/fixmystreet/history:
+    get:
+      summary: Get FixMyStreet reports with history (GeoJSON)
+      tags: [Urban Issues]
+      responses:
+        "200":
+          description: GeoJSON FeatureCollection including issue history
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FixMyStreetHistoryFeatureCollection"
+
+  # ============================================================
+  # INFRABEL COLLECTORS
+  # ============================================================
+  /api/infrabel/line-sections:
+    get:
+      summary: Get Infrabel network line sections (GeoJSON)
+      tags: [Rail - Infrabel]
+      responses:
+        "200":
+          description: Line sections data
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+
+  /api/infrabel/operational-points:
+    get:
+      summary: Get Infrabel network operational points (GeoJSON)
+      tags: [Rail - Infrabel]
+      responses:
+        "200":
+          description: Operational points data
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+
+  /api/infrabel/punctuality:
+    get:
+      summary: Get D-1 punctuality data of the Infrabel network
+      tags: [Rail - Infrabel]
+      responses:
+        "200":
+          description: Punctuality data
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/infrabel/segments:
+    get:
+      summary: Get Infrabel network segments data
+      tags: [Rail - Infrabel]
+      responses:
+        "200":
+          description: Segments data
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # IRCELINE COLLECTOR
+  # ============================================================
+  /api/irceline_sos:
+    get:
+      summary: Get IRCELINE air quality data
+      tags: [Air Quality]
+      responses:
+        "200":
+          description: Air quality data
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/AirQualityFeatureCollection"
+
+  # ============================================================
+  # LIME COLLECTORS
+  # ============================================================
+  /api/lime/vehicle-position:
+    get:
+      summary: Get Lime vehicle positions in Brussels
+      tags: [Mobility - Lime]
+      responses:
+        "200":
+          description: Vehicle positions
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+
+  /api/lime/vehicle-type:
+    get:
+      summary: Get Lime vehicle types
+      tags: [Mobility - Lime]
+      responses:
+        "200":
+          description: Vehicle types
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # OPENSKY COLLECTOR
+  # ============================================================
+  /api/opensky:
+    get:
+      summary: Get OpenSky aircraft positions (GeoJSON)
+      tags: [Aviation]
+      responses:
+        "200":
+          description: Live aircraft position data from OpenSky
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/OpenSkyFeatureCollection"
+
+  # ============================================================
+  # PONY COLLECTORS
+  # ============================================================
+  /api/pony/geofence:
+    get:
+      summary: Get Pony geofencing zones in Brussels
+      tags: [Mobility - Pony]
+      responses:
+        "200":
+          description: Geofencing zones
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+
+  /api/pony/vehicle-position:
+    get:
+      summary: Get Pony vehicle positions in Brussels
+      tags: [Mobility - Pony]
+      responses:
+        "200":
+          description: Vehicle positions
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+
+  /api/pony/vehicle-type:
+    get:
+      summary: Get Pony vehicle types
+      tags: [Mobility - Pony]
+      responses:
+        "200":
+          description: Vehicle types
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # SENSOR COMMUNITY COLLECTOR
+  # ============================================================
+  /api/sensor-community:
+    get:
+      summary: Get sensor community data
+      tags: [Sensors]
+      responses:
+        "200":
+          description: List of sensor community features
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/SensorCommunityFeatureCollection"
+
+  # ============================================================
+  # SIBELGA COLLECTOR
+  # ============================================================
+  /api/sibelga:
+    get:
+      summary: Get Sibelga utility data
+      tags: [Utilities]
+      responses:
+        "200":
+          description: Sibelga data
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # SNCB COLLECTORS
+  # ============================================================
+  /api/sncb/gtfs-static:
+    get:
+      summary: Get SNCB GTFS static feed (ZIP)
+      tags: [Transit - SNCB]
+      responses:
+        "200":
+          description: GTFS static ZIP file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  /api/sncb/gtfs-realtime:
+    get:
+      summary: Get SNCB GTFS realtime feed (ZIP)
+      tags: [Transit - SNCB]
+      responses:
+        "200":
+          description: GTFS realtime ZIP file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  # ============================================================
+  # STIB COLLECTORS
+  # ============================================================
+  /api/stib/gtfs:
+    get:
+      summary: Get STIB GTFS static feed (ZIP)
+      tags: [Transit - STIB]
+      responses:
+        "200":
+          description: GTFS static ZIP file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  /api/stib/shapefiles:
+    get:
+      summary: Get STIB shapefiles data
+      tags: [Transit - STIB]
+      responses:
+        "200":
+          description: Shapefiles data
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  /api/stib/vehicle-positions:
+    get:
+      summary: Get STIB vehicle positions in Brussels
+      tags: [Transit - STIB]
+      responses:
+        "200":
+          description: Vehicle positions
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/stib/stops:
+    get:
+      summary: Get STIB stops in Brussels
+      tags: [Transit - STIB]
+      responses:
+        "200":
+          description: STIB stops data
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # TEC COLLECTORS
+  # ============================================================
+  /api/tec/gtfs-static:
+    get:
+      summary: Get TEC GTFS static feed (ZIP)
+      tags: [Transit - TEC]
+      responses:
+        "200":
+          description: GTFS static ZIP file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  /api/tec/gtfs-realtime:
+    get:
+      summary: Get TEC GTFS realtime feed (ZIP)
+      tags: [Transit - TEC]
+      responses:
+        "200":
+          description: GTFS realtime ZIP file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  # ============================================================
+  # TELRAAM COLLECTOR
+  # ============================================================
+  /api/telraam/traffic:
+    get:
+      summary: Get Telraam traffic data (GeoJSON)
+      tags: [Traffic]
+      responses:
+        "200":
+          description: Live traffic data from Telraam (GeoJSON)
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/TelraamFeatureCollection"
+
+  # ============================================================
+  # ASSETS MANAGER
+  # ============================================================
+  /api/assets:
+    get:
+      summary: List all assets
+      tags: [Assets]
+      responses:
+        "200":
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetListResponse"
+    post:
+      summary: Upload a new asset
+      tags: [Assets]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AssetUploadRequest"
+      responses:
+        "201":
+          description: Asset created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetResponse"
+        "401":
+          description: Unauthorized
+        "400":
+          description: Bad request
+
+  /api/assets/upload-batch:
+    post:
+      summary: Upload multiple assets at once
+      tags: [Assets]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        "201":
+          description: Assets created successfully
+        "401":
+          description: Unauthorized
+
+  /api/assets/{id}:
+    get:
+      summary: Get asset by ID (inline display)
+      tags: [Assets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Asset content
+          content:
+            model/gltf-binary:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Asset not found
+    put:
+      summary: Update asset metadata
+      tags: [Assets]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetUpdateRequest"
+      responses:
+        "200":
+          description: Asset updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden - not owner
+        "404":
+          description: Asset not found
+    delete:
+      summary: Delete asset
+      tags: [Assets]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Asset deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden - not owner
+        "404":
+          description: Asset not found
+
+  /api/assets/{id}/download:
+    get:
+      summary: Download asset (attachment)
+      tags: [Assets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Asset file download
+          content:
+            model/gltf-binary:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Asset not found
+
+  # ============================================================
+  # POINT CLOUDS MANAGER
+  # ============================================================
+  /api/pointclouds:
+    get:
+      summary: List all point clouds
+      tags: [Point Clouds]
+      responses:
+        "200":
+          description: List of point clouds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetListResponse"
+    post:
+      summary: Upload a new point cloud
+      tags: [Point Clouds]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AssetUploadRequest"
+      responses:
+        "201":
+          description: Point cloud created successfully
+        "401":
+          description: Unauthorized
+
+  /api/pointclouds/{id}:
+    get:
+      summary: Get point cloud by ID
+      tags: [Point Clouds]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Point cloud content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Not found
+    put:
+      summary: Update point cloud metadata
+      tags: [Point Clouds]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetUpdateRequest"
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+    delete:
+      summary: Delete point cloud
+      tags: [Point Clouds]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /api/pointclouds/{id}/download:
+    get:
+      summary: Download point cloud
+      tags: [Point Clouds]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Point cloud file download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  # ============================================================
+  # TILESETS MANAGER
+  # ============================================================
+  /api/tilesets:
+    get:
+      summary: List all tilesets
+      tags: [Tilesets]
+      responses:
+        "200":
+          description: List of tilesets
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetListResponse"
+    post:
+      summary: Upload a new tileset (ZIP containing tileset.json)
+      tags: [Tilesets]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AssetUploadRequest"
+      responses:
+        "201":
+          description: Tileset created successfully
+        "401":
+          description: Unauthorized
+
+  /api/tilesets/{id}:
+    get:
+      summary: Get tileset by ID (returns tileset.json)
+      tags: [Tilesets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tileset JSON
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Not found
+    put:
+      summary: Update tileset metadata
+      tags: [Tilesets]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetUpdateRequest"
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+    delete:
+      summary: Delete tileset
+      tags: [Tilesets]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /api/tilesets/{id}/tileset.json:
+    get:
+      summary: Get tileset.json file
+      tags: [Tilesets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tileset JSON file
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/tilesets/{id}/{path}:
+    get:
+      summary: Get tileset tile file (GLB, B3DM, etc.)
+      tags: [Tilesets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Path to the tile file within the tileset
+      responses:
+        "200":
+          description: Tile file
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  # ============================================================
+  # DIGITAL TERRAIN MANAGER
+  # ============================================================
+  /api/digital_terrain:
+    get:
+      summary: List all digital terrain models
+      tags: [Digital Terrain]
+      responses:
+        "200":
+          description: List of digital terrain models
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetListResponse"
+    post:
+      summary: Upload a new digital terrain model
+      tags: [Digital Terrain]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AssetUploadRequest"
+      responses:
+        "201":
+          description: Digital terrain created successfully
+        "401":
+          description: Unauthorized
+
+  /api/digital_terrain/{id}:
+    get:
+      summary: Get digital terrain by ID
+      tags: [Digital Terrain]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Digital terrain JSON
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Not found
+    put:
+      summary: Update digital terrain metadata
+      tags: [Digital Terrain]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetUpdateRequest"
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+    delete:
+      summary: Delete digital terrain
+      tags: [Digital Terrain]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /api/digital_terrain/{id}/tileset.json:
+    get:
+      summary: Get digital terrain tileset.json file
+      tags: [Digital Terrain]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Tileset JSON file
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ============================================================
+  # WMS LAYERS MANAGER
+  # ============================================================
+  /wms_layers:
+    get:
+      summary: List all WMS layers
+      tags: [WMS Layers]
+      responses:
+        "200":
+          description: List of all WMS layers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WMSLayerListResponse"
+    post:
+      summary: Create a new WMS layer
+      tags: [WMS Layers]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WMSLayerCreateRequest"
+      responses:
+        "201":
+          description: Layer created
+        "401":
+          description: Unauthorized
+
+  /wms_layers/{id}:
+    get:
+      summary: Get WMS layer by ID
+      tags: [WMS Layers]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: WMS layer details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WMSLayer"
+        "404":
+          description: Not found
+    put:
+      summary: Update WMS layer
+      tags: [WMS Layers]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WMSLayerUpdateRequest"
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+    delete:
+      summary: Delete WMS layer
+      tags: [WMS Layers]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /wms_layers/servers/grouped:
+    get:
+      summary: Get all layers grouped by WMS server
+      tags: [WMS Layers]
+      responses:
+        "200":
+          description: Layers grouped by server URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WMSLayersGroupedResponse"
+
+  /wms_layers/servers/{wmsUrl}/layers:
+    get:
+      summary: Get all layers for a specific WMS server
+      tags: [WMS Layers]
+      parameters:
+        - name: wmsUrl
+          in: path
+          required: true
+          schema:
+            type: string
+          description: URL-encoded WMS server URL
+      responses:
+        "200":
+          description: Layers for the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WMSServerLayersResponse"
+    post:
+      summary: Add layers to a specific WMS server
+      tags: [WMS Layers]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: wmsUrl
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - layers
+              properties:
+                layers:
+                  type: array
+                  items:
+                    type: string
+                  description: List of layer names to add
+                description:
+                  type: string
+      responses:
+        "201":
+          description: Layers added
+        "401":
+          description: Unauthorized
+    delete:
+      summary: Delete all layers for a specific WMS server
+      tags: [WMS Layers]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: wmsUrl
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Layers deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  deleted_count:
+                    type: integer
+        "401":
+          description: Unauthorized
+
+  /wms_layers/layers/{id}/toggle:
+    put:
+      summary: Toggle layer active status
+      tags: [WMS Layers]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Layer status toggled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  layer_id:
+                    type: string
+                  active:
+                    type: boolean
+        "401":
+          description: Unauthorized
+        "404":
+          description: Layer not found
+
+  /wms_layers/bulk:
+    post:
+      summary: Add multiple layers at once (multi-server)
+      tags: [WMS Layers]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/WMSLayerBulkInput"
+      responses:
+        "201":
+          description: Layers added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  layers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        wms_url:
+                          type: string
+                        layer_name:
+                          type: string
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-user-id
+      description: Keycloak user ID (forwarded by APISIX)
+
+  schemas:
+    # ============================================================
+    # GeoJSON Base Schemas
+    # ============================================================
+    Point:
+      type: object
+      required: [type, coordinates]
+      properties:
+        type:
+          type: string
+          enum: [Point]
+        coordinates:
+          type: array
+          minItems: 2
+          maxItems: 3
+          items:
+            type: number
+
+    MultiPolygon:
+      type: object
+      required: [type, coordinates]
+      properties:
+        type:
+          type: string
+          enum: [MultiPolygon]
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              minItems: 4
+              items:
+                type: array
+                minItems: 2
+                maxItems: 3
+                items:
+                  type: number
+
+    Feature:
+      type: object
+      required: [type, geometry, properties]
+      properties:
+        type:
+          type: string
+          enum: [Feature]
+        geometry:
+          type: object
+        properties:
+          type: object
+
+    FeatureCollection:
+      type: object
+      required: [type, features]
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/Feature"
+
+    # ============================================================
+    # Bolt Schemas
+    # ============================================================
+    BoltGeofenceRule:
+      type: object
+      properties:
+        ride_allowed:
+          type: boolean
+        ride_through_allowed:
+          type: boolean
+        maximum_speed_kph:
+          type: number
+        vehicle_type_id:
+          type: array
+          items:
+            type: string
+
+    BoltGeofenceFeatureProperties:
+      type: object
+      properties:
+        name:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: "#/components/schemas/BoltGeofenceRule"
+
+    BoltGeofenceFeature:
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+        - type: object
+          properties:
+            geometry:
+              $ref: "#/components/schemas/MultiPolygon"
+            properties:
+              $ref: "#/components/schemas/BoltGeofenceFeatureProperties"
+
+    BoltGeofenceFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollection"
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: "#/components/schemas/BoltGeofenceFeature"
+
+    BoltGeofenceCollectorResponse:
+      type: object
+      properties:
+        last_updated:
+          type: integer
+        ttl:
+          type: integer
+        version:
+          type: string
+        data:
+          type: object
+          properties:
+            geofencing_zones:
+              $ref: "#/components/schemas/BoltGeofenceFeatureCollection"
+
+    BoltVehiclePositionFeatureProperties:
+      type: object
+      properties:
+        current_range_meters:
+          type: integer
+        current_fuel_percent:
+          type: number
+        pricing_plan_id:
+          type: string
+        vehicle_type_id:
+          type: string
+        is_reserved:
+          type: boolean
+        is_disabled:
+          type: boolean
+        bike_id:
+          type: string
+        rental_uris:
+          type: object
+          properties:
+            android:
+              type: string
+            ios:
+              type: string
+
+    BoltVehiclePositionFeature:
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+        - type: object
+          properties:
+            geometry:
+              $ref: "#/components/schemas/Point"
+            properties:
+              $ref: "#/components/schemas/BoltVehiclePositionFeatureProperties"
+
+    BoltVehiclePositionFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollection"
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: "#/components/schemas/BoltVehiclePositionFeature"
+
+    BoltVehicleType:
+      type: object
+      properties:
+        vehicle_type_id:
+          type: string
+        propulsion_type:
+          type: string
+          enum: [electric, electric_assist, human]
+        form_factor:
+          type: string
+          enum: [scooter, bicycle]
+        max_range_meters:
+          type: integer
+          nullable: true
+        name:
+          type: string
+        return_constraint:
+          type: string
+        default_reserve_time:
+          type: integer
+
+    BoltVehicleTypeCollectorResponse:
+      type: object
+      properties:
+        last_updated:
+          type: integer
+        ttl:
+          type: integer
+        version:
+          type: string
+        data:
+          type: object
+          properties:
+            vehicle_types:
+              type: array
+              items:
+                $ref: "#/components/schemas/BoltVehicleType"
+
+    # ============================================================
+    # Brussels Mobility Schemas
+    # ============================================================
+    BrusselsMobilityBikeCountersFeatureProperties:
+      type: object
+      properties:
+        device_name:
+          type: string
+        active:
+          type: boolean
+        road_nl:
+          type: string
+        road_fr:
+          type: string
+        road_en:
+          type: string
+
+    BrusselsMobilityBikeCountersFeature:
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+        - type: object
+          properties:
+            geometry:
+              $ref: "#/components/schemas/Point"
+            properties:
+              $ref: "#/components/schemas/BrusselsMobilityBikeCountersFeatureProperties"
+
+    BrusselsMobilityBikeCountersFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollection"
+        - type: object
+          properties:
+            requestDate:
+              type: string
+              format: date-time
+            totalFeatures:
+              type: integer
+
+    BrusselsMobilityBikeCountsResponse:
+      type: object
+      properties:
+        requestDate:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              hour_cnt:
+                type: integer
+              day_cnt:
+                type: integer
+              year_cnt:
+                type: integer
+              cnt_time:
+                type: string
+
+    BrusselsMobilityTrafficDevicesFeatureProperties:
+      type: object
+      properties:
+        traverse_name:
+          type: string
+        descr_nl:
+          type: string
+        descr_fr:
+          type: string
+        descr_en:
+          type: string
+        number_of_lanes:
+          type: integer
+        detectors:
+          type: array
+          items:
+            type: string
+
+    BrusselsMobilityTrafficDevicesFeature:
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+        - type: object
+          properties:
+            geometry:
+              $ref: "#/components/schemas/Point"
+            properties:
+              $ref: "#/components/schemas/BrusselsMobilityTrafficDevicesFeatureProperties"
+
+    BrusselsMobilityTrafficDevicesFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollection"
+        - type: object
+          properties:
+            requestDate:
+              type: string
+            totalFeatures:
+              type: integer
+
+    BrusselsMobilityTrafficCountsResponse:
+      type: object
+      description: Real-time traffic count data from Brussels Mobility
+      properties:
+        requestDate:
+          type: string
+          format: date-time
+        data:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              count:
+                type: integer
+              speed:
+                type: number
+              timestamp:
+                type: string
+
+    # ============================================================
+    # Energy Schemas
+    # ============================================================
+    EnergyConsumptionFeature:
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+        - type: object
+          properties:
+            externalID:
+              type: integer
+            name:
+              type: string
+            history:
+              type: array
+              items:
+                type: object
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  value:
+                    type: number
+                  symbol:
+                    type: string
+            lastUpdated:
+              type: string
+              format: date-time
+
+    EnergyConsumptionFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollection"
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: "#/components/schemas/EnergyConsumptionFeature"
+
+    # ============================================================
+    # FixMyStreet Schemas
+    # ============================================================
+    FixMyStreetFeature:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Feature]
+        geometry:
+          $ref: "#/components/schemas/Point"
+        properties:
+          type: object
+          properties:
+            id:
+              type: integer
+            creationDate:
+              type: string
+              format: date-time
+            updatedDate:
+              type: string
+              format: date-time
+            status:
+              type: string
+              enum: [CREATED, PROCESSING, CLOSED]
+            location:
+              type: object
+            category:
+              type: object
+            responsibleOrganisation:
+              type: object
+
+    FixMyStreetFeatureCollection:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/FixMyStreetFeature"
+
+    FixMyStreetHistoryFeature:
+      allOf:
+        - $ref: "#/components/schemas/FixMyStreetFeature"
+        - type: object
+          properties:
+            history:
+              type: object
+              nullable: true
+              properties:
+                issueId:
+                  type: integer
+                newStatus:
+                  type: string
+                newDate:
+                  type: string
+                oldStatus:
+                  type: string
+                oldDate:
+                  type: string
+
+    FixMyStreetHistoryFeatureCollection:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/FixMyStreetHistoryFeature"
+
+    # ============================================================
+    # OpenSky Schemas
+    # ============================================================
+    OpenSkyFeature:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Feature]
+        geometry:
+          $ref: "#/components/schemas/Point"
+        properties:
+          type: object
+          properties:
+            icao24:
+              type: string
+            callsign:
+              type: string
+              nullable: true
+            origin_country:
+              type: string
+            on_ground:
+              type: boolean
+            velocity:
+              type: number
+            heading:
+              type: number
+
+    OpenSkyFeatureCollection:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenSkyFeature"
+
+    # ============================================================
+    # Telraam Schemas
+    # ============================================================
+    TelraamFeature:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Feature]
+        geometry:
+          $ref: "#/components/schemas/Point"
+        properties:
+          type: object
+          properties:
+            segment_id:
+              type: integer
+            road_type:
+              type: string
+            vehicles:
+              type: object
+              properties:
+                car:
+                  type: object
+                  properties:
+                    count:
+                      type: integer
+                    avg_speed:
+                      type: number
+                bike:
+                  type: object
+                  properties:
+                    count:
+                      type: integer
+                pedestrian:
+                  type: object
+                  properties:
+                    count:
+                      type: integer
+            timestamp:
+              type: string
+              format: date-time
+
+    TelraamFeatureCollection:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/TelraamFeature"
+
+    # ============================================================
+    # Air Quality Schemas
+    # ============================================================
+    AirQualityFeatureProperties:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        uom:
+          type: string
+        lastValue.timestamp:
+          type: integer
+        lastValue.value:
+          type: number
+
+    AirQualityFeature:
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+        - type: object
+          properties:
+            id:
+              type: string
+            geometry:
+              $ref: "#/components/schemas/Point"
+            properties:
+              $ref: "#/components/schemas/AirQualityFeatureProperties"
+
+    AirQualityFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollection"
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: "#/components/schemas/AirQualityFeature"
+
+    # ============================================================
+    # Sensor Community Schemas
+    # ============================================================
+    SensorCommunityFeature:
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+        - type: object
+          properties:
+            id:
+              type: integer
+            geometry:
+              $ref: "#/components/schemas/Point"
+            properties:
+              type: object
+              properties:
+                sensordatavalues:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value_type:
+                        type: string
+                      value:
+                        type: string
+                      id:
+                        type: integer
+                id:
+                  type: integer
+                timestamp:
+                  type: string
+
+    SensorCommunityFeatureCollection:
+      allOf:
+        - $ref: "#/components/schemas/FeatureCollection"
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: "#/components/schemas/SensorCommunityFeature"
+
+    # ============================================================
+    # Assets Manager Schemas
+    # ============================================================
+    AssetMetadata:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+        filename:
+          type: string
+        contentType:
+          type: string
+        is_public:
+          type: boolean
+        owner_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    AssetListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetMetadata"
+
+    AssetResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+
+    AssetUploadRequest:
+      type: object
+      required: [file]
+      properties:
+        file:
+          type: string
+          format: binary
+        name:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+        is_public:
+          type: boolean
+          default: false
+
+    AssetUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+        is_public:
+          type: boolean
+
+    # ============================================================
+    # WMS Layers Schemas
+    # ============================================================
+    WMSLayer:
+      type: object
+      properties:
+        id:
+          type: integer
+        wms_url:
+          type: string
+        layer_name:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
+        owner_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    WMSLayerListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/WMSLayer"
+
+    WMSLayerCreateRequest:
+      type: object
+      required: [wms_url, layer_name]
+      properties:
+        wms_url:
+          type: string
+        layer_name:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
+          default: true
+
+    WMSLayerUpdateRequest:
+      type: object
+      properties:
+        wms_url:
+          type: string
+        layer_name:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
+
+    WMSLayerBulkInput:
+      type: object
+      required: [url, name]
+      properties:
+        url:
+          type: string
+          description: WMS server URL
+        name:
+          type: string
+          description: Layer name
+        description:
+          type: string
+        active:
+          type: boolean
+          default: true
+
+    WMSLayersGroupedResponse:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            layer_name:
+              type: string
+            description:
+              type: string
+            active:
+              type: boolean
+
+    WMSServerLayersResponse:
+      type: object
+      properties:
+        wms_url:
+          type: string
+        count:
+          type: integer
+        layers:
+          type: array
+          items:
+            $ref: "#/components/schemas/WMSLayer"
