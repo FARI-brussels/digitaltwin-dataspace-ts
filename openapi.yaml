@@ -25,7 +25,7 @@ paths:
       tags:
         - Assets
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -91,7 +91,7 @@ paths:
       tags:
         - Assets
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -134,7 +134,7 @@ paths:
       tags:
         - Assets
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -185,7 +185,7 @@ paths:
       tags:
         - Assets
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -229,25 +229,18 @@ paths:
           description: Unauthorized
     delete:
       summary: Batch delete assets_manager assets
-      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      description: Delete multiple assets by IDs. Requires authentication and ownership. Pass IDs as comma-separated query parameter.
       tags:
         - Assets
       security:
-        - apiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - ids
-              properties:
-                ids:
-                  type: array
-                  items:
-                    type: string
-                  description: Array of asset IDs to delete
+        - ApiKeyAuth: []
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Comma-separated list of asset IDs to delete (e.g., 1,2,3)
       responses:
         200:
           description: All assets deleted successfully
@@ -413,7 +406,7 @@ paths:
       tags:
         - DigitalTerrain
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -488,7 +481,7 @@ paths:
       tags:
         - DigitalTerrain
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -531,7 +524,7 @@ paths:
       tags:
         - DigitalTerrain
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -582,7 +575,7 @@ paths:
       tags:
         - DigitalTerrain
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -626,25 +619,18 @@ paths:
           description: Unauthorized
     delete:
       summary: Batch delete digital_terrain_manager assets
-      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      description: Delete multiple assets by IDs. Requires authentication and ownership. Pass IDs as comma-separated query parameter.
       tags:
         - DigitalTerrain
       security:
-        - apiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - ids
-              properties:
-                ids:
-                  type: array
-                  items:
-                    type: string
-                  description: Array of asset IDs to delete
+        - ApiKeyAuth: []
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Comma-separated list of asset IDs to delete (e.g., 1,2,3)
       responses:
         200:
           description: All assets deleted successfully
@@ -885,7 +871,7 @@ paths:
       tags:
         - PointCloud
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -951,7 +937,7 @@ paths:
       tags:
         - PointCloud
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -994,7 +980,7 @@ paths:
       tags:
         - PointCloud
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -1045,7 +1031,7 @@ paths:
       tags:
         - PointCloud
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -1089,25 +1075,18 @@ paths:
           description: Unauthorized
     delete:
       summary: Batch delete pointcloud_manager assets
-      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      description: Delete multiple assets by IDs. Requires authentication and ownership. Pass IDs as comma-separated query parameter.
       tags:
         - PointCloud
       security:
-        - apiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - ids
-              properties:
-                ids:
-                  type: array
-                  items:
-                    type: string
-                  description: Array of asset IDs to delete
+        - ApiKeyAuth: []
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Comma-separated list of asset IDs to delete (e.g., 1,2,3)
       responses:
         200:
           description: All assets deleted successfully
@@ -1348,7 +1327,7 @@ paths:
       tags:
         - Tileset
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -1423,7 +1402,7 @@ paths:
       tags:
         - Tileset
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -1466,7 +1445,7 @@ paths:
       tags:
         - Tileset
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -1517,7 +1496,7 @@ paths:
       tags:
         - Tileset
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -1561,25 +1540,18 @@ paths:
           description: Unauthorized
     delete:
       summary: Batch delete tilesets_manager assets
-      description: Delete multiple assets by IDs. Requires authentication and ownership.
+      description: Delete multiple assets by IDs. Requires authentication and ownership. Pass IDs as comma-separated query parameter.
       tags:
         - Tileset
       security:
-        - apiKeyAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - ids
-              properties:
-                ids:
-                  type: array
-                  items:
-                    type: string
-                  description: Array of asset IDs to delete
+        - ApiKeyAuth: []
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Comma-separated list of asset IDs to delete (e.g., 1,2,3)
       responses:
         200:
           description: All assets deleted successfully
@@ -1610,7 +1582,7 @@ paths:
       tags:
         - wms_layers
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -1661,7 +1633,7 @@ paths:
       tags:
         - wms_layers
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -1692,7 +1664,7 @@ paths:
       tags:
         - wms_layers
       security:
-        - apiKeyAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
