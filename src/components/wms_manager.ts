@@ -9,6 +9,7 @@ interface WMSLayerInput {
 
 interface RequestWithParams {
     params?: Record<string, string>
+    query?: Record<string, string>
     body?: unknown
 }
 
@@ -34,7 +35,10 @@ export class WMSLayersManager extends CustomTableManager {
                 { path: '/layers/:id/toggle', method: 'put', handler: 'toggleLayerStatus' },
 
                 // Bulk operations
-                { path: '/bulk', method: 'post', handler: 'addMultipleLayers' }
+                { path: '/bulk', method: 'post', handler: 'addMultipleLayers' },
+
+                // WMS Proxy (to bypass CORS issues)
+                { path: '/proxy', method: 'get', handler: 'proxyWmsRequest' }
             ]
         }
     }
@@ -494,6 +498,80 @@ export class WMSLayersManager extends CustomTableManager {
                 status: 500,
                 content: JSON.stringify({
                     error: error instanceof Error ? error.message : 'Unknown error'
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            }
+        }
+    }
+
+    /**
+     * GET /wms_layers/proxy
+     * Proxy WMS requests to bypass CORS issues
+     * Query params: url (required) + all WMS params (service, request, layers, bbox, etc.)
+     *
+     * Example: /wms_layers/proxy?url=https://example.com/wms&service=WMS&request=GetMap&layers=foo&...
+     */
+    async proxyWmsRequest(req: RequestWithParams): Promise<DataResponse> {
+        try {
+            // Express passes query as req.query (ParsedQs type)
+            const query = (req as any).query || {}
+
+            // Get the WMS URL - handle both string and array cases
+            const wmsUrl = Array.isArray(query.url) ? query.url[0] : query.url
+
+            if (!wmsUrl || typeof wmsUrl !== 'string') {
+                return {
+                    status: 400,
+                    content: JSON.stringify({ error: 'WMS URL is required as "url" query parameter' }),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            }
+
+            // Build the full WMS URL with all query parameters except 'url'
+            const targetUrl = new URL(wmsUrl)
+            for (const [key, value] of Object.entries(query)) {
+                if (key !== 'url' && value) {
+                    // Handle both string and array values
+                    const stringValue = Array.isArray(value) ? value[0] : value
+                    if (typeof stringValue === 'string') {
+                        targetUrl.searchParams.set(key, stringValue)
+                    }
+                }
+            }
+
+            // Fetch the WMS tile/image from the remote server
+            const response = await fetch(targetUrl.toString())
+
+            if (!response.ok) {
+                return {
+                    status: response.status,
+                    content: JSON.stringify({
+                        error: `WMS server returned ${response.status}: ${response.statusText}`
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            }
+
+            // Get the content type from the response
+            const contentType = response.headers.get('content-type') || 'image/png'
+
+            // Return the image data as a buffer
+            const buffer = Buffer.from(await response.arrayBuffer())
+
+            return {
+                status: 200,
+                content: buffer,
+                headers: {
+                    'Content-Type': contentType,
+                    'Cache-Control': 'public, max-age=3600',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                content: JSON.stringify({
+                    error: error instanceof Error ? error.message : 'Failed to proxy WMS request'
                 }),
                 headers: { 'Content-Type': 'application/json' }
             }
