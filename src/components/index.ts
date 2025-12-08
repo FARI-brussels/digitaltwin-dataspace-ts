@@ -1,4 +1,5 @@
-export { IrcelineSosCollector } from './irceline_sos_collector.js'
+export { IrcelineSosCollector } from './irceline/irceline_sos_collector.js'
+export { IrcelineSensorThingsHandler } from './irceline/irceline_sensorthings_handler.js'
 
 export { EnergyCollector } from './energy_collector.js'
 
@@ -44,10 +45,13 @@ export { LimeVehicleTypeCollector } from './lime/lime_vehicle_type_collector.js'
 export { OpenSkyCollector } from './opensky/opensky_collector.js'
 
 export { SensorCommunityCollector } from './sensor_community/sensor_community_collector.js'
+export { SensorCommunitySensorThingsHandler } from './sensor_community/sensor_community_sensorthings_handler.js'
 
 export { SibelgaCollector } from './sibelga/sibelga_collector.js'
 
 export { TelraamTrafficCollector } from './telraam/telraam_traffic_collector.js'
+
+export { VilloStationCapacityCollector } from './villo/villo_station_capacity_collector.js'
 
 export { FixMyStreetIncidentsCollector } from './fixmystreet/fixmystreet_incidents_collector.js'
 export { FixMyStreetHistoryHarvester } from './fixmystreet/fixmystreet_history_harvester.js'
@@ -62,3 +66,8 @@ export { DigitalTerrainManager } from './digitalterrain_manager.js'
 
 // === CUSTOM TABLE MANAGER ===
 export { WMSLayersManager } from './wms_manager.js'
+
+// === SENSORTHINGS ===
+export { SensorThingsHandler } from './sensorthings/sensorthings_handler.js'
+export { POLLUTANTS, getPollutant, resolvePollutant } from './sensorthings/pollutants.js'
+export type { PollutantDefinition } from './sensorthings/pollutants.js'
