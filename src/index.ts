@@ -39,10 +39,13 @@ import {
     LimeVehicleTypeCollector,
     OpenSkyCollector,
     SensorCommunityCollector,
+    UnifiedSensorThingsHandler,
+    AIR_QUALITY_SOURCES,
     SibelgaCollector,
     TelraamTrafficCollector,
     FixMyStreetIncidentsCollector,
-    FixMyStreetHistoryHarvester
+    FixMyStreetHistoryHarvester,
+    VilloStationCapacityCollector
 } from './components/index.js'
 
 async function main(): Promise<void> {
@@ -72,6 +75,7 @@ async function main(): Promise<void> {
         STIB_API_KEY: Env.schema.string(),
         DE_LIJN_API_KEY: Env.schema.string(),
         TELRAAM_API_KEY: Env.schema.string(),
+        JC_DECAUX_API_KEY: Env.schema.string(),
     })
 
     // Choose config based on NODE_ENV
@@ -156,6 +160,7 @@ async function main(): Promise<void> {
             new SibelgaCollector(),
             new TelraamTrafficCollector(),
             new FixMyStreetIncidentsCollector(),
+            new VilloStationCapacityCollector(),
         ],
         harvesters: [
             new FixMyStreetHistoryHarvester(),
@@ -168,6 +173,10 @@ async function main(): Promise<void> {
         ],
         customTableManagers: [
             new WMSLayersManager(),
+        ],
+        handlers: [
+            // Unified SensorThings API - add more sources by extending AIR_QUALITY_SOURCES
+            new UnifiedSensorThingsHandler(database, AIR_QUALITY_SOURCES),
         ]
     })
 
