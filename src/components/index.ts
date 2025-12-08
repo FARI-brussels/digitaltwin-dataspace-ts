@@ -1,5 +1,4 @@
 export { IrcelineSosCollector } from './irceline/irceline_sos_collector.js'
-export { IrcelineSensorThingsHandler } from './irceline/irceline_sensorthings_handler.js'
 
 export { EnergyCollector } from './energy_collector.js'
 
@@ -45,7 +44,6 @@ export { LimeVehicleTypeCollector } from './lime/lime_vehicle_type_collector.js'
 export { OpenSkyCollector } from './opensky/opensky_collector.js'
 
 export { SensorCommunityCollector } from './sensor_community/sensor_community_collector.js'
-export { SensorCommunitySensorThingsHandler } from './sensor_community/sensor_community_sensorthings_handler.js'
 
 export { SibelgaCollector } from './sibelga/sibelga_collector.js'
 
@@ -68,6 +66,8 @@ export { DigitalTerrainManager } from './digitalterrain_manager.js'
 export { WMSLayersManager } from './wms_manager.js'
 
 // === SENSORTHINGS ===
-export { SensorThingsHandler } from './sensorthings/sensorthings_handler.js'
+export { UnifiedSensorThingsHandler, createDatastream } from './sensorthings/unified_sensorthings_handler.js'
+export type { STThing, SourceConfig, SourceTransformer } from './sensorthings/unified_sensorthings_handler.js'
+export { sensorCommunityTransformer, ircelineTransformer, AIR_QUALITY_SOURCES } from './sensorthings/transformers.js'
 export { POLLUTANTS, getPollutant, resolvePollutant } from './sensorthings/pollutants.js'
 export type { PollutantDefinition } from './sensorthings/pollutants.js'

@@ -7,7 +7,6 @@ import {
     TilesetManager,
     WMSLayersManager,
     IrcelineSosCollector,
-    IrcelineSensorThingsHandler,
     EnergyCollector,
     STIBGTFSCollector,
     STIBShapeFilesCollector,
@@ -40,7 +39,8 @@ import {
     LimeVehicleTypeCollector,
     OpenSkyCollector,
     SensorCommunityCollector,
-    SensorCommunitySensorThingsHandler,
+    UnifiedSensorThingsHandler,
+    AIR_QUALITY_SOURCES,
     SibelgaCollector,
     TelraamTrafficCollector,
     FixMyStreetIncidentsCollector,
@@ -175,9 +175,8 @@ async function main(): Promise<void> {
             new WMSLayersManager(),
         ],
         handlers: [
-            // SensorThings API handlers - transform raw data on-the-fly
-            new SensorCommunitySensorThingsHandler(database),
-            new IrcelineSensorThingsHandler(database),
+            // Unified SensorThings API - add more sources by extending AIR_QUALITY_SOURCES
+            new UnifiedSensorThingsHandler(database, AIR_QUALITY_SOURCES),
         ]
     })
 
