@@ -1,5 +1,15 @@
-export { IrcelineSosCollector } from './irceline_sos_collector.js'
+// === SENSORTHINGS (Air Quality) ===
+export { SensorThingsCollector } from './sensorthings/sensorthings_collector.js'
+export { SensorThingsHandler } from './sensorthings/sensorthings_handler.js'
+export type { SensorThingsSource } from './sensorthings/sensorthings_handler.js'
+export { POLLUTANTS, getPollutant, resolvePollutant } from './sensorthings/pollutants.js'
+export type { PollutantDefinition } from './sensorthings/pollutants.js'
+export type { STThing, STDatastream, STObservation, STLocation, STCollection } from './sensorthings/types.js'
 
+export { IrcelineCollector } from './irceline/irceline_collector.js'
+export { SensorCommunityCollector } from './sensor_community/sensor_community_collector.js'
+
+// === OTHER COLLECTORS ===
 export { EnergyCollector } from './energy_collector.js'
 
 export { STIBGTFSCollector } from './stib/stib_gtfs_collector.js'
@@ -42,8 +52,6 @@ export { LimeVehiclePositionCollector } from './lime/lime_vehicle_position_colle
 export { LimeVehicleTypeCollector } from './lime/lime_vehicle_type_collector.js'
 
 export { OpenSkyCollector } from './opensky/opensky_collector.js'
-
-export { SensorCommunityCollector } from './sensor_community/sensor_community_collector.js'
 
 export { SibelgaCollector } from './sibelga/sibelga_collector.js'
 
