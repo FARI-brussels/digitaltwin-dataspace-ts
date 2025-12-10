@@ -6,7 +6,11 @@ import {
     PointCloudAssetsManager,
     TilesetManager,
     WMSLayersManager,
-    IrcelineSosCollector,
+    // SensorThings collectors (output standardized format)
+    IrcelineCollector,
+    SensorCommunityCollector,
+    SensorThingsHandler,
+    // Other collectors
     EnergyCollector,
     STIBGTFSCollector,
     STIBShapeFilesCollector,
@@ -38,12 +42,26 @@ import {
     LimeVehiclePositionCollector,
     LimeVehicleTypeCollector,
     OpenSkyCollector,
-    SensorCommunityCollector,
     SibelgaCollector,
     TelraamTrafficCollector,
     FixMyStreetIncidentsCollector,
     FixMyStreetHistoryHarvester
 } from './components/index.js'
+
+/**
+ * SensorThings sources configuration
+ * Maps source keys to collector names for the unified handler
+ */
+const SENSORTHINGS_SOURCES = {
+    'irceline': {
+        collectorName: 'irceline',
+        label: 'IRCELINE (Belgian Air Quality)'
+    },
+    'sensor-community': {
+        collectorName: 'sensor_community',
+        label: 'Sensor.Community (Citizen Science)'
+    }
+}
 
 async function main(): Promise<void> {
     // Validate environment variables
@@ -120,7 +138,10 @@ async function main(): Promise<void> {
             port: env.REDIS_PORT || 6379
         },
         collectors: [
-            new IrcelineSosCollector(),
+            // Air Quality - SensorThings format
+            new IrcelineCollector(),
+            new SensorCommunityCollector(),
+            // Other collectors
             new EnergyCollector(),
             new STIBGTFSCollector(),
             new STIBShapeFilesCollector(),
@@ -152,7 +173,6 @@ async function main(): Promise<void> {
             new LimeVehiclePositionCollector(),
             new LimeVehicleTypeCollector(),
             new OpenSkyCollector(),
-            new SensorCommunityCollector(),
             new SibelgaCollector(),
             new TelraamTrafficCollector(),
             new FixMyStreetIncidentsCollector(),
@@ -168,6 +188,10 @@ async function main(): Promise<void> {
         ],
         customTableManagers: [
             new WMSLayersManager(),
+        ],
+        handlers: [
+            // Unified SensorThings API - aggregates all air quality sources
+            new SensorThingsHandler(database, SENSORTHINGS_SOURCES),
         ]
     })
 
